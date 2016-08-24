@@ -4,7 +4,7 @@ use Doctrine\ORM\Tools\Console\ConsoleRunner;
 use Emeric0101\PHPAngular\Controller\Comparator;
 use Doctrine\Common\Annotations\AnnotationReader;
 
-const targetEntity = 'AFE\\DmoBundle\\';
+const targetEntity = 'Emeric0101\\PHPAngular';
 const resetWebDir = false;
 
 $autoloadFiles = array(__DIR__ . '/../../vendor/autoload.php',
@@ -257,18 +257,18 @@ final class ManyToMany
 			return $code;
 		}
 		private function createOneToOne($name, $targetEntity) {
-			$targetJs = implode('.', explode('\\', $targetEntity)) . '.Entity';
+			$targetJs = implode('.', explode('\\', $targetEntity));
 			$code = '  		private ' . $name . ' :' . $targetJs . ' = null;'. PHP_EOL;
 			$code .= '		get' . ucFirst($name) . '() : ' . $targetJs . ' {' . PHP_EOL;
 			$code .= '			return this.foreignKey(\'' . $name . '\');' . PHP_EOL;
 			$code .= '		}' . PHP_EOL;
-            $code .= '      set' . ucFirst($name) . '(v : ' . $targetJs . '[]) {' . PHP_EOL;
+            $code .= '      set' . ucFirst($name) . '(v : ' . $targetJs . ') {' . PHP_EOL;
             $code .= '          this.' . $name . ' = v;' . PHP_EOL;
             $code .= '      }' . PHP_EOL;
 			return $code;
 		}
 		private function createOneToMany($name, $targetEntity) {
-            $targetJs = implode('.', explode('\\', $targetEntity)) . '.Entity';
+            $targetJs = implode('.', explode('\\', $targetEntity));
 			$code = '  		private ' . $name . ' :' . $targetJs . ' = null;'. PHP_EOL;
 			$code .= '		get' . ucFirst($name) . '() : ' . $targetJs . ' {' . PHP_EOL;
 			$code .= '			return this.foreignKeys(\'' . $name . '\');' . PHP_EOL;
@@ -287,7 +287,7 @@ final class ManyToMany
             $cwd = getcwd();
             $this->createWeb();
             $this->createEntityFactory($targetJs);
-			$className = targetEntity . 'Entity\\';
+			$className = targetEntity . '\\Entity\\';
 
 
 			echo PHP_EOL;
@@ -297,7 +297,7 @@ final class ManyToMany
 				$classNameCurrent = $className . $entity;
 				echo 'Class ' . $classNameCurrent . PHP_EOL;
                 $class = new $classNameCurrent();
-                $code = 'module ' . $targetJs . ' {' . PHP_EOL;
+                $code = 'module ' . $targetJs . '.Entity {' . PHP_EOL;
                 $code .= '    export class '. $entity . ' extends Emeric0101.PHPAngular.Entity.Model {' . PHP_EOL;
 
                 $reflectionClass = new \ReflectionClass($classNameCurrent);
