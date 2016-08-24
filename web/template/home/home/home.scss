@@ -1,0 +1,81 @@
+
+.homeWrapper {
+    width: 900px;
+    margin: auto;
+    text-align: center;
+    height: 488px;
+}
+.hageImg {
+    float: left;
+    height: 162px;
+    left: -291px;
+    width: 201px;
+    position: relative;
+}
+
+
+.pateSante {
+    @extend .imgPageOrange;
+    float: right;
+    right: 1px;
+    position: relative;
+
+}
+
+
+.pateAnnonce {
+    @extend .imgPateBleue;
+    float: left;
+    left: 335px;
+    position: relative;
+}
+
+
+.pateService {
+    @extend .imgPateViolette;
+    float: right;
+     position: relative;
+     right: -229px;
+     top: 283px;
+}
+
+
+.pateAnnuaire {
+    @extend .imgPateAnnuaire;
+    float: left;
+    left: -212px;
+    position: relative;
+    top: 33px;
+}
+
+.pateAbout {
+    @extend .imgPateAbout;
+    float: left;
+    left: -400px;
+    position: relative;
+    top: 100px;
+}
+
+.pate {
+    cursor: pointer;
+}
+.pateHoverLeft {
+    position: absolute;
+    width: 50%;
+    height: 100%;
+    background-size: contain;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+}
+.pateHoverRight {
+    position: absolute;
+    width: 50%;
+    height: 100%;
+    background-size: contain;
+    left: 50%;
+    top: 0;
+    right: 0;
+    bottom: 0;
+}

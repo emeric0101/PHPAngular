@@ -1,0 +1,28 @@
+{
+    "name": "emeric0101/phpangular",
+    "description": "A complete framework for php with angular and Doctrine",
+    "author": {
+        "name": "Emeric BAVEUX",
+        "email": "emeric0101@gmail.com"
+    },
+    "license": "Apache License",
+    "minimum-stability": "dev",
+    "require": {
+        "doctrine/orm": "^2.5",
+        "leafo/scssphp": "0.6.3",
+        "neitanod/forceutf8": "^2"
+
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^5.3"
+    },
+    "bin": ["bin/phpangular.php"],
+	"autoload": {
+        "psr-4": {
+            "Emeric0101\\PHPAngular\\Entity\\": "src/Entity/",
+            "Emeric0101\\PHPAngular\\Repository\\": "src/Repository/",
+            "Emeric0101\\PHPAngular\\Controller\\": "src/Controller/",
+            "Emeric0101\\PHPAngular\\Service\\": "src/Service/"
+        }
+    }
+}
