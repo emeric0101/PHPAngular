@@ -4,9 +4,6 @@ use Doctrine\ORM\Tools\Console\ConsoleRunner;
 use Emeric0101\PHPAngular\Controller\Comparator;
 use Doctrine\Common\Annotations\AnnotationReader;
 
-const targetEntity = 'Emeric0101\\PHPAngular';
-const resetWebDir = false;
-
 $autoloadFiles = array(__DIR__ . '/../../vendor/autoload.php',
                        __DIR__ . '/../../../autoload.php');
 
@@ -282,12 +279,12 @@ final class ManyToMany
 
         function main() {
 			echo 'Phangular.io - Generate entities' . PHP_EOL;
-            $targetJs = implode('.', explode('\\', targetEntity));
+            $targetJs = implode('.', explode('\\', PHPANGULAR_BUNDLE));
 
             $cwd = getcwd();
             $this->createWeb();
             $this->createEntityFactory($targetJs);
-			$className = targetEntity . '\\Entity\\';
+			$className = PHPANGULAR_BUNDLE . '\\Entity\\';
 
 
 			echo PHP_EOL;
