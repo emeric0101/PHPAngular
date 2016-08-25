@@ -22,12 +22,15 @@ abstract class Controller {
         $controllerGet = $request->get("controller", "Home");
         $methodGet = $request->get("method", "index");
         $idGet = intval($request->get('id', ""));
-        if (class_exists(PHPANGULAR_BUNDLE . 'Controller\\' . $controllerGet)) {
-			$controllerName = PHPANGULAR_BUNDLE . 'Controller\\' . $controllerGet;
+        if (class_exists(PHPANGULAR_BUNDLE . '\\Controller\\' . $controllerGet)) {
+			$controllerName = PHPANGULAR_BUNDLE . '\\Controller\\' . $controllerGet;
         }
         else if (class_exists('Emeric0101\\PHPAngular\\Controller\\' . $controllerGet)) {
 			$controllerName = 'Emeric0101\\PHPAngular\\Controller\\' . $controllerGet;
-        }		
+        }
+        else {
+            throw new \Exception("Controller not found");
+        }
         $controllerInstance = new $controllerName();
         if (method_exists($controllerInstance, $methodGet)) {
             $method = $methodGet;

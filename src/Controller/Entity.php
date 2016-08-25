@@ -29,7 +29,7 @@ class Entity extends Controller {
             $this->response->setError();
             return false;
         }
-        $entity = $this->entityManager->find("AFE\\DmoBundle\\Entity\\" . $this->name, $id);
+        $entity = $this->entityManager->find(PHPANGULAR_BUNDLE ."\\Entity\\" . $this->name, $id);
         if ($entity === null) {
             $this->response->setError("NOT_FOUND");
             return false;
@@ -42,7 +42,7 @@ class Entity extends Controller {
     * @param id integer
     **/
     private function gets() {
-        $entities = $this->entityManager->getRepository("AFE\\DmoBundle\\Entity\\" . $this->name)->findAll();
+        $entities = $this->entityManager->getRepository(PHPANGULAR_BUNDLE . "\\Entity\\" . $this->name)->findAll();
         $this->response->setResponse($this->name . 's', $entities);
         return true;
     }
