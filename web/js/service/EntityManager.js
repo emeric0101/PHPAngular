@@ -68,6 +68,11 @@ var Emeric0101;
                         if (value === null || typeof (value) === 'undefined') {
                             continue;
                         }
+                        if ((typeof (value) === 'array' || typeof (value) === 'object') && value.length > 0 && typeof (value[0].getId) === 'function') {
+                            for (var objIndex in value) {
+                                value[objIndex] = value[objIndex].getId();
+                            }
+                        }
                         if (typeof (value) === 'function') {
                             continue;
                         }

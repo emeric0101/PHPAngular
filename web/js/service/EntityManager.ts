@@ -69,6 +69,13 @@ module Emeric0101.PHPAngular.Service {
                 if (value === null || typeof(value) === 'undefined') {
                     continue;
                 }
+                // array of model
+                if ((typeof(value) === 'array' || typeof(value) === 'object') && value.length > 0 && typeof(value[0].getId) === 'function'){
+                    // We must linearise the array of object
+                    for (var objIndex in value) {
+                        value[objIndex] = value[objIndex].getId();
+                    }
+                }
                 if (typeof(value) === 'function') {continue;}
                 if (value instanceof Emeric0101.PHPAngular.Service.RepositoryService) {continue;}
                 // Entity (instanceof ne marche pas toujours)
