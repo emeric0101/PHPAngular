@@ -84,8 +84,7 @@ class Cli {
 
     function main() {
         echo 'Phangular.io - Generate entities' . PHP_EOL;
-        $targetJs = implode('.', explode('\\', PHPANGULAR_BUNDLE));
-
+        $targetJs = implode('.', explode('\\', substr(PHPANGULAR_BUNDLE, 1)));
         $cwd = getcwd();
         $this->createWeb();
         $this->createEntityFactory($targetJs);
