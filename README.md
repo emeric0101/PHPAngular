@@ -1,7 +1,19 @@
-# PHPAngular
+# PHPAngular alpha 0.1
 
 ## The simpliest way to angularise the world !
 
+### Changelog
+
+### Todo
+- [x] EntityManager client side
+- [x] Entity generator from server client side
+- [x] RepositoryService client side
+- [ ] Custom method call by the repository service to get data from server
+- [ ] Post array recursivly for the request class on server
+- [ ] Using systemjs for dynamic loading of controller ? (not sure)
+- [ ] User login
+- [ ] Right management
+- [ ] 
 
 ### Installation
 #### Composer config
@@ -81,5 +93,68 @@ class Message extends Entity {
         return true;
     }
 }
-
 ```
+
+The class Message derived from Entity which implements all entity controller basic functions. If you only need a controller, you can derived from Emeric0101\PHPAngular\Controller\Controller class.
+When an object is save from Typescript, the **post** function is called with the $id (0 if it is a new object).
+In this method, first we try to find the object into the db with the id, else we create a new one.
+> The entity Manager of doctrine is accessible with $this->entityManager
+For getting data from GET, SESSION, COOKIE or POST, you can use the servier Request ($this->request).
+```PHP
+public function post($name, $default);
+public function get($name, $default);
+public function cookie($name, $default);
+public function session($name, $default);
+public function postFromArray($arrayName, $name, $default);
+```
+The *$name* is the index of the var requested. *$default* is the default value (in case of non correct data). **$default MUST be the same TYPE as the variable request** (string, number, ...)
+With the method postFromArray you can get a var extract from an array from Post. This method is used to get value from TypeScript Entity Manager.
+
+The rest of the method is same as doctrine
+
+#### Front-end
+
+After running PHPAngular.bat, some files are created in the *web* folder. In *web/js/Entity*, you find all entities from doctrine.
+All routes, entities management, ... are provided by PHPAngular so you just need to create template and controller in order to build your app.
+
+##### Routing
+The route is easy to use : **url/folder1/folder2** will call the template into template/folder1/folder2/folder2.html.
+If folder2 is not provided, folder1 will be repeated.
+
+In *web/template/home/home/*, we find a sample controller and a template. 
+```Typescript
+module Emeric0101.PHPAngular.Controller {
+    class MainController {
+        message : TestVendor.TestBundle.Message = null;
+        messages : TestVendor.TestBundle.Message[] = [];
+        static $inject = ['UrlService', 'EntityManager', 'EntityFactory', 'RepositoryService'];
+        getMessage() {
+            this.$repo.findAll('Message', (messages) => {
+                this.messages = <TestVendor.TestBundle.Message[]>messages;
+            };
+        }
+        createMessage() {
+            this.message = this.$ef.create('Message');
+            this.message.setTitle("test");
+            this.message.setDescription("test");
+            this.$em.persist(this.message);
+            this.$em.flush();
+        }
+        constructor(
+            private $url : Emeric0101.PHPAngular.Service.UrlService,
+            private $em : Emeric0101.PHPAngular.Service.EntityManager,
+            private $ef : Emeric0101.PHPAngular.Service.EntityFactory,
+            private $repo : Emeric0101.PHPAngular.Service.RepositoryService
+        ){
+            
+        }
+    }
+    phpangularModule.controller("MainController", MainController);
+
+}
+```
+> The entityManager is like doctrine entityManager (so it automaticly persists all entities linked to)
+
+> You can use MainController::message directly as ng-model in the template (ng-model="ctrl.message.title")
+
+For using this controller into the template, you just need to call it with ng-controller="MainController as ctrl".
