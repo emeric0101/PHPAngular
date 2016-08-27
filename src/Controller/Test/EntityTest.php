@@ -1,44 +1,65 @@
 <?php
 use phpunit\framework\TestCase;
-use Emeric0101\PHPAngular\Entity\User;
+use Emeric0101\PHPAngular\Entity\EntityTestP;
 use Emeric0101\PHPAngular\Service\DbService;
 use Emeric0101\PHPAngular\Controller\Controller;
 use Emeric0101\PHPAngular\Service\Response;
 
 class EntityControllerTest extends TestCase
 {
+
     /**
-     * @dataProvider providerTestGet1
+     * @dataProvider providerTestGets1
      */
-    public function testGet1($model, $id, $result, $entity)
+    public function testGets1($model, $result, $entity)
     {
+        Response::getInstance()->clear();
+
         $_GET['controller'] = 'Entity';
         $_GET['method'] = $model;
-        $_GET['id'] = $id . "";
+        $_GET['id'] = 0;
+
         Controller::callController();
         $buffer = Response::getInstance()->getBuffer();
-        $this->assertEquals($buffer[$model]->jsonSerialize(), $result);
+        var_dump($buffer,$result);
+        foreach ($result[$model . 's'] as $r) {
+            $this->assertEquals($r->jsonSerialize(), $result);
+        }
         $em = DbService::getInstance()->getEntityManager();
         // Cleaning
-        if ($entity !== null) {
-            $em->remove($entity);
+        if (!empty($entity)) {
+            foreach ($entity as $e) {
+                $em->remove($e);
+            }
             $em->flush();
         }
     }
 
-    public function providerTestGet1() {
+    public function providerTestGets1() {
         $entityManager = DbService::getInstance()->getEntityManager();
-        $user = new User();
-        $user->setPassword("tata");
-        $user->setNickname("tata");
-        $user->setSex(0);
-        $user->setMail("emeric" . time() . "@tata.fr");
 
-        $entityManager->persist($user);
+    // Cleaning
+        $entities = $entityManager->getRepository('Emeric0101\\PHPAngular\\Entity\\EntityTestP')->findAll();
+        foreach ($entities as $e) {
+            $entityManager->remove($e);
+        }
         $entityManager->flush();
-        $array = $user->jsonSerialize();
+
+
+        $entityTest1 = new EntityTestP();
+        $entityTest1->setTest("tata1");
+        $entityTest2 = new EntityTestP();
+        $entityTest2->setTest("tata2");
+
+
+        $entityManager->persist($entityTest1);
+        $entityManager->persist($entityTest2);
+        $entityManager->flush();
+        $array =
+            [$entityTest1->jsonSerialize(),$entityTest2->jsonSerialize()]
+        ;
         return [
-            ["User", $user->getId(), $array, $user]
+            ["EntityTestP", $array, [$entityTest1, $entityTest2]]
         ];
     }
 }

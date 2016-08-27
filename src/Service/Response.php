@@ -6,6 +6,11 @@ class Response extends Singleton {
         'success' => false
     ];
 
+
+    public function clear() {
+        $this->buffer = ['success' => false];
+    }
+
     public function setError($errMsg = '') {
         $this->buffer['errMsg'] = $errMsg;
         $this->buffer['success'] = false;

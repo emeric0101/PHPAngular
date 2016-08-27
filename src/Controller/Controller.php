@@ -13,15 +13,9 @@ abstract class Controller {
         $this->entityManager = DbService::getInstance()->getEntityManager();
         $this->request = Request::getInstance();
     }
-    static function callController() {
-        // Getting the controller asked
-        $controller = 'Home';
-        $method = 'index';
-        $request = Request::getInstance();
-        $response = Response::getInstance();
-        $controllerGet = $request->get("controller", "Home");
-        $methodGet = $request->get("method", "index");
-        $idGet = intval($request->get('id', ""));
+
+
+    static public function getControllerName($controllerGet) {
         if (class_exists(PHPANGULAR_BUNDLE . '\\Controller\\' . $controllerGet)) {
 			$controllerName = PHPANGULAR_BUNDLE . '\\Controller\\' . $controllerGet;
         }
@@ -31,6 +25,22 @@ abstract class Controller {
         else {
             throw new \Exception("Controller not found");
         }
+        return $controllerName;
+    }
+
+    static function callController() {
+        // Getting the controller asked
+        $controller = 'Home';
+        $method = 'index';
+        $request = Request::getInstance();
+        $response = Response::getInstance();
+
+        $controllerGet = $request->get("controller", "Home");
+        $controllerName = static::getControllerName($controllerGet);
+
+        $methodGet = $request->get("method", "index");
+        $idGet = intval($request->get('id', ""));
+
         $controllerInstance = new $controllerName();
         if (method_exists($controllerInstance, $methodGet)) {
             $method = $methodGet;
