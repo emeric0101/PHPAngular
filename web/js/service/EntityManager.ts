@@ -112,7 +112,12 @@ module Emeric0101.PHPAngular.Service {
 
         }
 
-        public flush(callback? : (result) => void) {
+        /**
+        * Synchronise all object with server and db
+        * @param callback (result) => void
+        * @param autoclear Avoid autoclear of persisted entities
+        */
+        public flush(callback? : (result) => void, autoclear = true) {
             var $this = this;
             $this.$repo.clearCache();
             if (typeof (callback) === "undefined") {
@@ -121,8 +126,13 @@ module Emeric0101.PHPAngular.Service {
             if (this.persistObjs.length === 0) { return;}
 
             var persistObjs = this.persistObjs;
+            // Clear all persist obj
+            if (autoclear) {
+                $this.clear();
+            }
+
             var i = 0;
-            var magicFunction = function(response) {
+            var magicFunction = (response) => {
                 if (!response) {
                     callback(false);
                     return;
@@ -132,7 +142,7 @@ module Emeric0101.PHPAngular.Service {
                     callback(true);
                     return;
                 }
-                $this.save(persistObjs[i], magicFunction)
+                this.save(persistObjs[i], magicFunction)
             };
             // Init recurrence
             $this.save(persistObjs[0], magicFunction)

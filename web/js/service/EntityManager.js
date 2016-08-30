@@ -105,7 +105,9 @@ var Emeric0101;
                         callback(false);
                     });
                 };
-                EntityManager.prototype.flush = function (callback) {
+                EntityManager.prototype.flush = function (callback, autoclear) {
+                    var _this = this;
+                    if (autoclear === void 0) { autoclear = true; }
                     var $this = this;
                     $this.$repo.clearCache();
                     if (typeof (callback) === "undefined") {
@@ -115,6 +117,9 @@ var Emeric0101;
                         return;
                     }
                     var persistObjs = this.persistObjs;
+                    if (autoclear) {
+                        $this.clear();
+                    }
                     var i = 0;
                     var magicFunction = function (response) {
                         if (!response) {
@@ -126,7 +131,7 @@ var Emeric0101;
                             callback(true);
                             return;
                         }
-                        $this.save(persistObjs[i], magicFunction);
+                        _this.save(persistObjs[i], magicFunction);
                     };
                     $this.save(persistObjs[0], magicFunction);
                 };
