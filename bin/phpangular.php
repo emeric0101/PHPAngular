@@ -194,4 +194,4 @@ final class ManyToMany
 
 
     $mainClass = new Emeric0101\PHPAngular\Service\Cli();
-    $mainClass->main();
+    $mainClass->main($argv);

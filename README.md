@@ -13,7 +13,7 @@
 - [ ] Using systemjs for dynamic loading of controller ? (not sure)
 - [ ] User login
 - [ ] Right management
-- [ ] 
+- [ ]
 
 ### Installation
 #### Composer config
@@ -46,7 +46,7 @@ Then you can use doctrine to create the mysql database with `doctrine orm:schema
 
 Run the script
 
-`phpangular`
+`phpangular install`
 
 `cd web
 
@@ -84,7 +84,7 @@ class Message extends Entity {
         // Get from POST
         $title = $this->request->postFromArray("Message",'title', ''));
         $desription = $this->request->postFromArray("Message",'description', ''));
-        
+
         $entityMessage->setTitle($title);
         $entityMessage->setDescription($description);
         $this->entityManager->persist($entityMessage);
@@ -121,7 +121,7 @@ All routes, entities management, ... are provided by PHPAngular so you just need
 The route is easy to use : **url/folder1/folder2** will call the template into template/folder1/folder2/folder2.html.
 If folder2 is not provided, folder1 will be repeated.
 
-In *web/template/home/home/*, we find a sample controller and a template. 
+In *web/template/home/home/*, we find a sample controller and a template.
 ```Typescript
 module Emeric0101.PHPAngular.Controller {
     class MainController {
@@ -146,7 +146,7 @@ module Emeric0101.PHPAngular.Controller {
             private $ef : Emeric0101.PHPAngular.Service.EntityFactory,
             private $repo : Emeric0101.PHPAngular.Service.RepositoryService
         ){
-            
+
         }
     }
     phpangularModule.controller("MainController", MainController);

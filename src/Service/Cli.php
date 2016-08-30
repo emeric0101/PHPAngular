@@ -5,16 +5,18 @@ use Doctrine\Common\Annotations\AnnotationReader;
 class Cli {
     private $entities = [];
 
-    private function recurse_copy($src,$dst) {
+    private function recurse_copy($src,$dst, $force = true) {
         $dir = opendir($src);
         @mkdir($dst);
         while(false !== ( $file = readdir($dir)) ) {
             if (( $file != '.' ) && ( $file != '..' )) {
                 if ( is_dir($src . '/' . $file) ) {
-                    $this->recurse_copy($src . '/' . $file,$dst . '/' . $file);
+                    $this->recurse_copy($src . '/' . $file,$dst . '/' . $file, $force);
                 }
                 else {
-                    copy($src . '/' . $file,$dst . '/' . $file);
+                    if (!file_exists($dst . '/' . $file) || $force) {
+                        copy($src . '/' . $file,$dst . '/' . $file);
+                    }
                 }
             }
         }
@@ -54,7 +56,7 @@ class Cli {
         $code .= '			return this.' . $name . ';' . PHP_EOL;
         $code .= '		}' . PHP_EOL;
         $code .= '      set' . ucFirst($name) . '(v : ' . $type . ')  {' . PHP_EOL;
-        $code .= '          this.' . $name . ' = v;' . PHP_EOL;
+        $code .= '          this.setValue(\'' . $name . '\', v);' . PHP_EOL;
         $code .= '      }' . PHP_EOL;
         return $code;
     }
@@ -65,7 +67,7 @@ class Cli {
         $code .= '			return this.foreignKey(\'' . $name . '\');' . PHP_EOL;
         $code .= '		}' . PHP_EOL;
         $code .= '      set' . ucFirst($name) . '(v : ' . $targetJs . ') {' . PHP_EOL;
-        $code .= '          this.' . $name . ' = v;' . PHP_EOL;
+        $code .= '          this.setValue(\'' . $name . '\', v);' . PHP_EOL;
         $code .= '      }' . PHP_EOL;
         return $code;
     }
@@ -76,17 +78,16 @@ class Cli {
         $code .= '			return this.foreignKeys(\'' . $name . '\');' . PHP_EOL;
         $code .= '		}' . PHP_EOL;
         $code .= '      set' . ucFirst($name) . '(v : ' . $targetJs . '[]) {' . PHP_EOL;
-        $code .= '          this.' . $name . ' = v;' . PHP_EOL;
+        $code .= '          this.setValue(\'' . $name . '\', v);' . PHP_EOL;
         $code .= '      }' . PHP_EOL;
         return $code;
     }
 
-
-    function main() {
+    function install() {
         echo 'Phangular.io - Generate entities' . PHP_EOL;
         $targetJs = implode('.', explode('\\', substr(PHPANGULAR_BUNDLE, 1)));
         $cwd = getcwd();
-        $this->createWeb();
+        $this->createWeb(false);
         $this->createEntityFactory($targetJs);
         $className = PHPANGULAR_BUNDLE . '\\Entity\\';
 
@@ -151,16 +152,29 @@ class Cli {
         echo 'cd web' . PHP_EOL;
         echo 'bower install' . PHP_EOL;
         echo 'Then, you have to compile everything with Typescript compiler (command "tsc")' . PHP_EOL;
+
+    }
+
+    function update() {
+        $this->createWeb();
+    }
+
+
+    function main($argv) {
+        $method = 'help';
+        if (count($argv) > 1) {
+            $method = $argv[1];
+        }
+        $this->$method();
+    }
+
+    function help() {
+        echo 'Help : you can use "install", "update"' . PHP_EOL;
     }
 
     private function createWeb() {
         $cwd = getcwd();
-        // check if web dir exists
-        if (file_exists($cwd . '/web')) {
-            if (!resetWebDir) {
-                return false;
-            }
-        }
+
         $packagePath = $cwd . '/vendor/emeric0101/phpangular/';
         @mkdir($cwd . '/web');
         $this->recurse_copy($packagePath . 'web', $cwd . '/web');
