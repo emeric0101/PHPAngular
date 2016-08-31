@@ -14,6 +14,10 @@
 - [x] Possibility to combine find request from js to avoid multiple network call
 - [ ] Possibility to combine save request from js
 
+### Samples
+This website uses my library:
+https://www.amelieferrari.fr
+
 ### Installation
 #### Composer config
 Define all namespace we will use for Entity in composer.json (you can use the namespace you want but it must be like XX\XX\Entity, and other class you may need like Controller, Service, ...)
