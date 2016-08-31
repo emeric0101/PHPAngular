@@ -10,10 +10,10 @@ var Emeric0101;
                     this.repositoryService = repositoryService;
                     this.isFromDb = false;
                     this._foreignKeys = [];
-                    this.changed = false;
+                    this.changed = true;
                 }
                 Model.prototype.getChanged = function () {
-                    return this.changed;
+                    return this.changed || !this.isFromDb;
                 };
                 Model.prototype.setValue = function (name, value) {
                     this.changed = true;

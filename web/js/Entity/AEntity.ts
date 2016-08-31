@@ -5,11 +5,11 @@ module Emeric0101.PHPAngular.Entity {
         private isFromDb: boolean = false;
         private _foreignKeys : string[] = []; // List of all foreign keys requested
 
-        private changed = false; // all base values to detect change
+        private changed = true; // all base values to detect change
         public getChanged() {
-            return this.changed;
+            return this.changed || !this.isFromDb;
         }
-        private setValue(name, value) {
+        protected setValue(name, value) {
             this.changed = true;
             this[name] = value;
         }

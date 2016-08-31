@@ -23,23 +23,27 @@ abstract class Controller {
 			$controllerName = 'Emeric0101\\PHPAngular\\Controller\\' . $controllerGet;
         }
         else {
-            throw new \Exception("Controller not found");
+            throw new \Exception("Controller : $controllerGet not found");
         }
         return $controllerName;
     }
 
-    static function callController() {
+    static function callController($controllerGet = null, $methodGet = null, $idGet = null, $params = null) {
         // Getting the controller asked
         $controller = 'Home';
         $method = 'index';
         $request = Request::getInstance();
         $response = Response::getInstance();
 
-        $controllerGet = $request->get("controller", "Home");
+		// if not provided, get from the $_GET
+		if ($controllerGet == null) {
+			$controllerGet = $request->get("controller", "Home");
+			$methodGet = $request->get("method", "index");
+			$idGet = intval($request->get('id', ""));
+		}
+
         $controllerName = static::getControllerName($controllerGet);
 
-        $methodGet = $request->get("method", "index");
-        $idGet = intval($request->get('id', ""));
 
         $controllerInstance = new $controllerName();
         if (method_exists($controllerInstance, $methodGet)) {

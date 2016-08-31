@@ -63,6 +63,10 @@ var Emeric0101;
                     var $this = this;
                     var objs = {};
                     var dataToSend = {};
+                    if (!obj.getChanged()) {
+                        callback(true);
+                        return;
+                    }
                     for (var i in obj) {
                         var value = obj[i];
                         if (value === null || typeof (value) === 'undefined') {

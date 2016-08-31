@@ -1,13 +1,43 @@
+
 module Emeric0101.PHPAngular.Service {
+
+    class Request {
+        private static globalrequestid = 1;
+        private requestid;
+        constructor(
+            private controller : string,
+            private method: string,
+            private id : number,
+            private params : any,
+            private entity : string,
+            private callback : (obj : Emeric0101.PHPAngular.Entity.Model) => void,
+            private error : () => void = () => {}
+        ) {
+            this.requestid = Request.globalrequestid++;
+        }
+        getRequestId(){return this.requestid;}
+        getId() {return this.id;}
+        getController() {return this.controller;}
+        getMethod() {return this.method;}
+        getParams() {return this.params;}
+        getEntity() {return this.entity;}
+        getCallback(){return this.callback;}
+        getError() {return this.error;}
+    }
+
     export class RepositoryService{
-        static $inject = ['AjaxService', 'UrlService', 'EntityFactory'];
+        static $inject = ['AjaxService', 'UrlService', 'EntityFactory', '$interval'];
         private entities = [];
+        // DEPRECATED
         private requestById = [];
 
+        private requests : Request[] = [];
+        private requestTimer = null;
 
         constructor(private AjaxService : Emeric0101.PHPAngular.Service.AjaxService,
              private UrlService : Emeric0101.PHPAngular.Service.UrlService,
-             private EntityFactory : Emeric0101.PHPAngular.Service.EntityFactory
+             private EntityFactory : Emeric0101.PHPAngular.Service.EntityFactory,
+             private $interval : angular.IIntervalService
          ) {
 
         }
@@ -22,6 +52,70 @@ module Emeric0101.PHPAngular.Service {
                 return null;
             }
             return this.entities[name][id];
+        }
+
+        /** Add a request into the request list to be executed
+        */
+        private addGetRequest(request : Request) {
+            this.requests.push(request);
+            // Fire after a little interval to get maximum request
+            if (this.requestTimer == null) {
+                this.requestTimer = this.$interval(() => {
+                    this.runRequests(this.requests.slice(0)); // slice = clone
+                    this.requestTimer = null;
+                }, 10, 1);
+            }
+
+        }
+
+        /** Create a ajax request for runRequest */
+        private prepareRequests(requests : Request[]) {
+            var params = [];
+            for (var i in this.requests) {
+                var request = this.requests[i];
+                params.push({
+                    id: request.getId(),
+                    method: request.getMethod(),
+                    controller: request.getController(),
+                    params: request.getParams(),
+                    requestid: request.getRequestId()
+                });
+
+            }
+            return params;
+        }
+        /** Get the request according to the requestid
+        */
+        private getRequestFromRequestId(requestid : number, requests : Request[]) {
+            for (var i in requests) {
+                if (requests[i].getRequestId() == requestid) {
+                    return requests[i];
+                }
+            }
+            return null;
+        }
+        /** Execute all the requests list */
+        private runRequests(requests : Request[]) {
+            var params = this.prepareRequests(requests);
+            this.AjaxService.post(this.UrlService.makeApi('Multiple', 'index'), params, (d) => {
+                if (typeof(d.data.Multiple) === 'undefined') {
+                    // Call all error callback !
+                    for (var i in requests) {
+                        this.requests[i].getError()();
+                    }
+                    return false;
+                }
+                var data = d.data.Multiple;
+                // Manage request
+                for (var i in data) {
+                    var request = this.getRequestFromRequestId(data[i].requestid, requests);
+                    // Callback
+                    request.getCallback()(data[i]);
+                }
+            });
+
+            // Clear request list
+            this.requests = [];
         }
 
         findById(name : string, id :number, callback : (obj : Emeric0101.PHPAngular.Entity.Model) => void, error? : () => void) {
@@ -42,44 +136,25 @@ module Emeric0101.PHPAngular.Service {
                 return;
             }
 
-            // Prevent from duplicate request
-            var callbackItem = {
-                callback: callback,
-                error: error
-            };
-            // Create the array for the request if not exist
-            if (typeof(this.requestById[name + id]) === 'undefined' || $this.requestById[name + id].length == 0) {
-                $this.requestById[name + id] = [callbackItem];
-            }
-            else {
-                // Add the callback to the list requested and end
-                $this.requestById[name + id].push(callbackItem);
-                return;
-            }
-
-
-            this.AjaxService.get($this.UrlService.makeApi("Entity", name, id), {},
-            function(result) {
-                var data = result.data;
-                if (!data.success) {
-                    error();
-                    return;
-                }
-                var obj = $this.EntityFromJson(data[name], name);
-                // Callback
-                for (var i in $this.requestById[name + id]) {
-                    $this.requestById[name + id][i].callback(obj);
-                }
-                $this.requestById[name + id] = []; // reset
-            },
-            function() {
-                // Callback error
-                for (var i in $this.requestById[name + id]) {
-                    $this.requestById[name + id][i].error();
-                }
-                $this.requestById[name + id] = []; // reset
-            });
-
+            // Prepare the query
+            var request = new Request(
+                'Entity',
+                name,
+                id,
+                {},
+                name,
+                (data) => {
+                    if (!data['success']) {
+                        error();
+                        return;
+                    }
+                    var obj = this.EntityFromJson(data[name], name);
+                    callback(obj);
+                },
+                error
+            );
+            // add the request to the list
+            this.addGetRequest(request);
         }
         /**
         * @param obj object
@@ -120,22 +195,61 @@ module Emeric0101.PHPAngular.Service {
             if (typeof (error) !== 'function') {
                 error = function() {};
             }
-            this.AjaxService.get(
-                this.UrlService.makeApi('Entity', name),
+
+            // Prepare the query
+            var request = new Request(
+                'Entity',
+                name,
+                0,
                 {},
-                function(result) {
-                    var data = result.data;
-                    if (data.success !== true || typeof(data[name + "s"]) === 'undefined') {
+                name,
+                (data) => {
+                    if (!data['success']) {
                         error();
                         return;
                     }
-                    var objArray = $this.EntitiesFromJson(data[name + "s"], name);
-                    callback(objArray);
+                    var objs = this.EntitiesFromJson(data[name + 's'], name);
+                    callback(objs);
                 },
-                function() {
-                    error();
-                }
-            )
+                error
+            );
+            // add the request to the list
+            this.addGetRequest(request);
+        }
+
+        /**
+        * Find some entites by calling a method from the controller
+        * @param method string Method called in the server controller
+        * @param name string Controller name (must be the same than the entity expected !), with capital letter
+        * @param id number Can be used to pass args to the server controller
+        * @param success callback(array of Entity)
+        * @param error callback
+        */
+        findSome(method: string, name : string, id: number, params: any, callback : (obj : any[]) => void, error? : () => void) {
+            var $this = this;
+            if (typeof (error) !== 'function') {
+                error = function() {};
+            }
+
+            // Prepare the query
+            var request = new Request(
+                name,
+                method,
+                id,
+                params,
+                name,
+                (data) => {
+                    if (!data['success']) {
+                        error();
+                        return;
+                    }
+                    var objs = this.EntitiesFromJson(data[name + 's'], name);
+                    callback(objs);
+                },
+                error
+            );
+            // add the request to the list
+            this.addGetRequest(request);
         }
     }
     phpangularModule.service("RepositoryService", RepositoryService);

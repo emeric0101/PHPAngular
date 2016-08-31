@@ -8,12 +8,11 @@
 - [x] EntityManager client side
 - [x] Entity generator from server client side
 - [x] RepositoryService client side
-- [ ] Custom method call by the repository service to get data from server
+- [x] Custom method call by the repository service to get data from server
 - [ ] Post array recursivly for the request class on server
-- [ ] Using systemjs for dynamic loading of controller ? (not sure)
-- [ ] User login
 - [ ] Right management
-- [ ]
+- [x] Possibility to combine find request from js to avoid multiple network call
+- [ ] Possibility to combine save request from js
 
 ### Installation
 #### Composer config
@@ -158,3 +157,17 @@ module Emeric0101.PHPAngular.Controller {
 > You can use MainController::message directly as ng-model in the template (ng-model="ctrl.message.title")
 
 For using this controller into the template, you just need to call it with ng-controller="MainController as ctrl".
+
+##### Custom query
+
+You may use custom query to get entities from the server. The repository service permits you to do this by the method findSome
+```Typescript
+findSome(
+    method: string, // The method you want into the controller
+    name : string, // The controller to call in the server (MUST BE THE SAME NAME THAN THE ENTITY REQUESTED)
+    id: number, // Args to pass to the controller
+    params: any, // Get params to the controller (if id is not enough)
+    callback : (obj : any[]) => void, // callback to call after (because async)
+    error? : () => void
+) {
+```

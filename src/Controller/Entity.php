@@ -46,4 +46,5 @@ class Entity extends Controller {
         $this->response->setResponse($this->name . 's', $entities);
         return true;
     }
+
 }

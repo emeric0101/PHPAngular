@@ -63,6 +63,11 @@ module Emeric0101.PHPAngular.Service {
             var $this = this;
             var objs = {};
             var dataToSend = {};
+            // if not change in the object
+            if (!obj.getChanged()) {
+                callback(true);
+                return;
+            }
             for (var i in obj) {
                 var value = obj[i];
                 // Excludes :
