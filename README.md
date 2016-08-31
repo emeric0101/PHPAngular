@@ -171,3 +171,16 @@ findSome(
     error? : () => void
 ) {
 ```
+
+In the controller (PHP) :
+```PHP
+public function someFunction($id = 0) {
+    if ($id == 0) {
+        $this->response->setError("missing id");
+        return false;
+    }
+    $message = $this->entityManager->find("TestVendor\TestBundle\Entity\Message", $id);
+    $this->response->setResponse('Message', $message);
+}
+```
+Obviously, this method is useless because it does exactly the same as findById().
