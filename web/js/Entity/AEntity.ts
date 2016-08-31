@@ -5,7 +5,7 @@ module Emeric0101.PHPAngular.Entity {
         private isFromDb: boolean = false;
         private _foreignKeys : string[] = []; // List of all foreign keys requested
 
-        private changed = true; // all base values to detect change
+        private changed = false; // all base values to detect change
         public getChanged() {
             return this.changed || !this.isFromDb;
         }
@@ -99,10 +99,7 @@ module Emeric0101.PHPAngular.Entity {
         }debugger;
 
         public setValues(values : {}) {
-            if (this.isFromDb) {
-                console.error("Accessing setValues from a db model is forbidden !");
-                return;
-            }
+
             for (var i in values) {
                 var value = values[i];
                 if (value !== null && typeof (value["class"]) === 'string') {
@@ -117,6 +114,13 @@ module Emeric0101.PHPAngular.Entity {
                 this[i] = value;
             }
             this.isFromDb = true; // lock the model
+        }
+
+        // Update the entity from server
+        update() {
+            this.repositoryService.findById(this.name, this.id, (obj) => {
+                this.setValues(obj);
+            });
         }
 
         constructor(private name: string, protected repositoryService) {

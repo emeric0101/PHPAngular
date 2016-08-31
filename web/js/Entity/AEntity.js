@@ -10,7 +10,7 @@ var Emeric0101;
                     this.repositoryService = repositoryService;
                     this.isFromDb = false;
                     this._foreignKeys = [];
-                    this.changed = true;
+                    this.changed = false;
                 }
                 Model.prototype.getChanged = function () {
                     return this.changed || !this.isFromDb;
@@ -74,10 +74,6 @@ var Emeric0101;
                     return obj[field];
                 };
                 Model.prototype.setValues = function (values) {
-                    if (this.isFromDb) {
-                        console.error("Accessing setValues from a db model is forbidden !");
-                        return;
-                    }
                     for (var i in values) {
                         var value = values[i];
                         if (value !== null && typeof (value["class"]) === 'string') {
@@ -91,6 +87,12 @@ var Emeric0101;
                         this[i] = value;
                     }
                     this.isFromDb = true;
+                };
+                Model.prototype.update = function () {
+                    var _this = this;
+                    this.repositoryService.findById(this.name, this.id, function (obj) {
+                        _this.setValues(obj);
+                    });
                 };
                 return Model;
             }());
