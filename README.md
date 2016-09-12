@@ -5,6 +5,8 @@
 ### Changelog
 
 ### Todo
+- [ ] Using php-di for dependency injection
+- [ ] Using fast route for request 
 - [x] EntityManager client side
 - [x] Entity generator from server client side
 - [x] RepositoryService client side
