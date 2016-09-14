@@ -60,6 +60,7 @@ class Cache extends AService {
     */
     public function generate($extension = 'js') {
         $dirs = [];
+        static::scandirOB(APP_DIR . 'web/core', $extension, $dirs);
         static::scandirOB(APP_DIR . 'web/' . $extension, $extension, $dirs);
         static::scandirOB(APP_DIR . 'web/template', $extension, $dirs);
         $content = '';

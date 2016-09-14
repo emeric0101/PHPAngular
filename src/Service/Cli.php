@@ -17,6 +17,8 @@ class Cli extends AService {
                     if (!file_exists($dst . '/' . $file) || $force) {
                         $result = copy($src . '/' . $file,$dst . '/' . $file);
                         if ($result == false) {
+							var_dump('src : ' . $src . '/' . $file, file_exists('src : ' . $src . '/' . $file));
+							var_dump('dst: ' . $dst . '/' . $file);
                             throw new CliCopyError();
                         }
                     }
@@ -180,9 +182,9 @@ class Cli extends AService {
 
         $packagePath = $cwd . '/vendor/emeric0101/phpangular/';
         @mkdir($cwd . '/web');
-        @mkdir($cwd . '/web/core');
+        @mkdir($cwd . '/web/js');
         try {
-            $this->recurse_copy($packagePath . 'web', $cwd . '/core/web');
+            $this->recurse_copy($packagePath . 'web', $cwd . '/web');
         }
         catch (CliCopyError $e) {
             echo 'Unable to copy web directory : ' . $e->getMessage() . PHP_EOL;

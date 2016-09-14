@@ -15,6 +15,7 @@
 - [ ] Right management
 - [x] Possibility to combine find request from js to avoid multiple network call
 - [ ] Possibility to combine save request from js
+- [ ] Unit test with Yasmine
 
 ### Samples
 This website uses my library:
@@ -120,6 +121,7 @@ The rest of the method is same as doctrine
 #### Front-end
 
 After running PHPAngular.bat, some files are created in the *web* folder. In *web/js/Entity*, you find all entities from doctrine.
+The default controller is "home" (template/home/home/home.html), but we provided a demo controller to help you to create this one.
 All routes, entities management, ... are provided by PHPAngular so you just need to create template and controller in order to build your app.
 
 ##### Routing
