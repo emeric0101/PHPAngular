@@ -1,6 +1,6 @@
 {
     "name": "emeric0101/phpangular",
-    "description": "A complete framework for php with angular and Doctrine",
+    "description": "A complete framework for php and typescript with angular and Doctrine",
     "author": {
         "name": "Emeric BAVEUX",
         "email": "emeric0101@gmail.com"
@@ -8,6 +8,7 @@
     "license": "Apache License",
     "minimum-stability": "dev",
     "require": {
+        "php": "^7.0",
         "doctrine/orm": "^2.5",
         "leafo/scssphp": "0.6.3",
         "neitanod/forceutf8": "^2",
