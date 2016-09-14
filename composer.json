@@ -24,8 +24,9 @@
             "Emeric0101\\PHPAngular\\Repository\\": "src/Repository/",
             "Emeric0101\\PHPAngular\\Controller\\": "src/Controller/",
             "Emeric0101\\PHPAngular\\Service\\": "src/Service/",
+            "Emeric0101\\PHPAngular\\Core\\": "src/Core/",
             "Emeric0101\\PHPAngularTest\\Entity\\" : "test/src/Entity",
-            "Emeric0101\\PHPAngularTest\\Controller":"test/src/Controller"
+            "Emeric0101\\PHPAngularTest\\Controller\\":"test/src/Controller"
         }
     }
 }
