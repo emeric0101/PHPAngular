@@ -11,7 +11,8 @@
         "doctrine/orm": "^2.5",
         "leafo/scssphp": "0.6.3",
         "neitanod/forceutf8": "^2",
-        "php-di/php-di": "^5.4"
+        "php-di/php-di": "^5.4",
+        "ocramius/proxy-manager": "^2.0"
 
     },
     "require-dev": {
