@@ -177,7 +177,8 @@ class Cli extends AService {
 
         $packagePath = $cwd . '/vendor/emeric0101/phpangular/';
         @mkdir($cwd . '/web');
-        $this->recurse_copy($packagePath . 'web', $cwd . '/web');
+        @mkdir($cwd . '/web/core');
+        $this->recurse_copy($packagePath . 'web', $cwd . '/core/web');
         // copy the layout
         @mkdir($cwd . '/src');
         @mkdir($cwd . '/src/layout');
