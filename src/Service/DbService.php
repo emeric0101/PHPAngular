@@ -2,14 +2,13 @@
 namespace Emeric0101\PHPAngular\Service;
 use Doctrine\ORM\Tools\Setup;
 use Doctrine\ORM\EntityManager;
-class DbService extends Singleton {
+class DbService extends AService {
     private $entityManager = null;
 
     public function getEntityManager() {
         return $this->entityManager;
     }
-    protected function __construct() {
-        parent::__construct();
+    public function __construct() {
         $isDevMode = true;
         $config = Setup::createAnnotationMetadataConfiguration(array("src/Entity"), $isDevMode);
 

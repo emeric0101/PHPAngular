@@ -1,10 +1,11 @@
 <?php
 namespace Emeric0101\PHPAngular\Controller;
-use Emeric0101\PHPAngular\Controller\Controller;
-use Emeric0101\PHPAngular\Service\DbService;
 
 class Multiple extends Controller {
-
+	private $controllerService = null;
+	public function __construct(ControllerService $controllerService) {
+		$this->controllerService = $controllerService;
+	}
 	/**
 	* Dispatch all request
 	*/
@@ -14,7 +15,7 @@ class Multiple extends Controller {
 		foreach ($post as $request) {
 			$_GET['method'] = $request['method'];
 			foreach ($request['params'] as $t => $p) { $_GET[$t] = $p;}
-			static::callController($request['controller'], $request['method'], $request['id'], $request['params']);
+			$controllerService->callController($request['controller'], $request['method'], $request['id'], $request['params']);
 			$buffer = $this->response->getBuffer();
 			$buffer['requestid'] = $request['requestid']; // unique id
 			$buffers[] = $buffer;

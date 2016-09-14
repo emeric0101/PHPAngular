@@ -1,7 +1,7 @@
 <?php
 namespace Emeric0101\PHPAngular\Service;
 
-class Url extends Singleton {
+class Url extends AService {
 
     public function redirect($module, $action = "", $id = null) {
         $url = $this->make($module, $action, $id);

@@ -1,7 +1,7 @@
 <?php
 namespace Emeric0101\PHPAngular\Service;
 use Leafo\ScssPhp\Compiler;
-class Cache{
+class Cache extends AService {
 
     /**
 	 * Parse les dossiers à la recherche de fichier d'extension précisé et renvoi un tableau de ces fichiers

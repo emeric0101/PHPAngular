@@ -2,7 +2,7 @@
 namespace Emeric0101\PHPAngular\Service;
 use Doctrine\Common\Annotations\AnnotationReader;
 
-class Cli {
+class Cli extends AService {
     private $entities = [];
 
     private function recurse_copy($src,$dst, $force = true) {

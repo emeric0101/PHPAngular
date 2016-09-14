@@ -6,9 +6,11 @@ use Emeric0101\PHPAngular\Service\Sprite;
 
 class CacheController extends Controller {
     private $cache = null;
+    private $sprite = null;
 
-    public function __construct() {
-        $this->cache = new Cache();
+    public function __construct(Cache $cache, Sprite $sprite) {
+        $this->cache = $cache;
+        $this->sprite = $sprite;
     }
     private function _generate($extension, $test = false) {
         echo $this->cache->generate($extension, $test);
@@ -38,7 +40,7 @@ class CacheController extends Controller {
         exit();
     }
     public function generateSprite() {
-        $spriteService = Sprite::getInstance()->cacheSprite(APP_DIR . 'web/images');
+        $spriteService = $this->sprite->cacheSprite(APP_DIR . 'web/images');
     }
 
 }

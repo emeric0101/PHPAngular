@@ -1,7 +1,7 @@
 <?php
 namespace Emeric0101\PHPAngular\Service;
 use \ForceUTF8\Encoding;
-class Response extends Singleton {
+class Response extends AService {
     private $buffer = [
         'success' => false
     ];

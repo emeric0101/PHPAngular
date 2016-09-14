@@ -1,6 +1,6 @@
 <?php
 namespace Emeric0101\PHPAngular\Service;
-
-class Auth extends AService {
+class ServiceBlank extends AService
+{
 
 }

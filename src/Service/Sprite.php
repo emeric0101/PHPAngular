@@ -3,7 +3,7 @@ namespace Emeric0101\PHPAngular\Service;
 use \ForceUTF8\Encoding;
 use Emeric0101\PHPAngular\Service\Cache;
 
-class Sprite extends Singleton {
+class Sprite extends AService {
     function cacheSprite($path, $racine = '', &$width = 1, &$height = 1) {
 		static $imageType = [
 			'image/png',

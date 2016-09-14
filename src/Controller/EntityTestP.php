@@ -1,7 +1,6 @@
 <?php
 namespace Emeric0101\PHPAngular\Controller;
 use Emeric0101\PHPAngular\Controller\Entity;
-use Emeric0101\PHPAngular\Service\DbService;
 use Emeric0101\PHPAngular\Entity\EntityTestP;
 class EntityTestP extends Entity {
 

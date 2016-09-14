@@ -1,6 +1,6 @@
 <?php
 namespace Emeric0101\PHPAngular\Service;
-class Request extends Singleton
+class Request extends AService
 {
     const GET = 0;
     const POST = 1;

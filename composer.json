@@ -10,7 +10,8 @@
     "require": {
         "doctrine/orm": "^2.5",
         "leafo/scssphp": "0.6.3",
-        "neitanod/forceutf8": "^2"
+        "neitanod/forceutf8": "^2",
+        "php-di/php-di": "^5.4"
 
     },
     "require-dev": {
@@ -22,7 +23,9 @@
             "Emeric0101\\PHPAngular\\Entity\\": "src/Entity/",
             "Emeric0101\\PHPAngular\\Repository\\": "src/Repository/",
             "Emeric0101\\PHPAngular\\Controller\\": "src/Controller/",
-            "Emeric0101\\PHPAngular\\Service\\": "src/Service/"
+            "Emeric0101\\PHPAngular\\Service\\": "src/Service/",
+            "Emeric0101\\PHPAngularTest\\Entity\\" : "test/src/Entity",
+            "Emeric0101\\PHPAngularTest\\Controller":"test/src/Controller"
         }
     }
 }
