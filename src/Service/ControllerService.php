@@ -6,6 +6,7 @@ class ControllerService extends AService{
     private $response = null;
     public function __construct($container) {
         $this->container = $container;
+		$container->set('Emeric0101\PHPAngular\Service\ControllerService', $this);
         $this->request = $container->get('Emeric0101\PHPAngular\Service\Request');
         $this->response = $container->get('Emeric0101\PHPAngular\Service\Response');
     }
@@ -36,7 +37,6 @@ class ControllerService extends AService{
 		}
 
         $controllerName = static::getControllerName($controllerGet);
-
         $controllerInstance = $this->container->get($controllerName);
         if (method_exists($controllerInstance, $methodGet)) {
             $method = $methodGet;

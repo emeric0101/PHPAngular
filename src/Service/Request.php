@@ -8,7 +8,7 @@ class Request extends AService
 
     /** Return the reference of $_POST
     */
-    private function &_getPost() {
+    public function &_getPost() {
         $global = &$_POST;
         $json = file_get_contents('php://input');
         if (empty($global) && !empty($json)) {
