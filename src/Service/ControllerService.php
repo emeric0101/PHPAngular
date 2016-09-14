@@ -37,7 +37,15 @@ class ControllerService extends AService{
 		}
 
         $controllerName = static::getControllerName($controllerGet);
+
+        // Add base services if the controller don't exist
         $controllerInstance = $this->container->get($controllerName);
+        $this->container->call(function(Response $response, DbService $db, Request $request) use ($controllerInstance){
+            $controllerInstance->setBaseService($response, $db, $request);
+        });
+
+
+
         if (method_exists($controllerInstance, $methodGet)) {
             $method = $methodGet;
         }

@@ -1,7 +1,7 @@
 <?php
 namespace Emeric0101\PHPAngular\Service;
 use Doctrine\Common\Annotations\AnnotationReader;
-
+class CliCopyError extends \Exception {}
 class Cli extends AService {
     private $entities = [];
 
@@ -15,7 +15,10 @@ class Cli extends AService {
                 }
                 else {
                     if (!file_exists($dst . '/' . $file) || $force) {
-                        copy($src . '/' . $file,$dst . '/' . $file);
+                        $result = copy($src . '/' . $file,$dst . '/' . $file);
+                        if ($result == false) {
+                            throw new CliCopyError();
+                        }
                     }
                 }
             }
@@ -178,7 +181,14 @@ class Cli extends AService {
         $packagePath = $cwd . '/vendor/emeric0101/phpangular/';
         @mkdir($cwd . '/web');
         @mkdir($cwd . '/web/core');
-        $this->recurse_copy($packagePath . 'web', $cwd . '/core/web');
+        try {
+            $this->recurse_copy($packagePath . 'web', $cwd . '/core/web');
+        }
+        catch (CliCopyError $e) {
+            echo 'Unable to copy web directory : ' . $e->getMessage() . PHP_EOL;
+            return false;
+        }
+
         // copy the layout
         @mkdir($cwd . '/src');
         @mkdir($cwd . '/src/layout');
