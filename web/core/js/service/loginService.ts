@@ -1,4 +1,4 @@
-module AFE.DmoBundle.Service {
+module Emeric0101.PHPAngular.Service {
     export class LoginService {
         static $inject = ['AjaxService', 'UrlService', 'RepositoryService'];
         private user : Emeric0101.PHPAngular.Entity.IUser = null;
@@ -76,7 +76,7 @@ module AFE.DmoBundle.Service {
                 return;
             }
 
-            this.$ajaxService.get(this.$url.makeApi("User", "getLoginInfo"), {}, function(r) {
+            this.$ajaxService.get(this.$url.makeApi("Login", "getLoginInfo"), {}, function(r) {
                 var data = r.data;
                 $this.logged = true; // request done
                 if (data.success === true && typeof(data.user) !== "undefined") {

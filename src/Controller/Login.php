@@ -1,11 +1,13 @@
 <?php
 namespace Emeric0101\PHPAngular\Controller;
-class Login extends Emeric0101\PHPAngular\Controller\Controller {
+use Emeric0101\PHPAngular\Controller\Controller;
+
+class Login extends Controller {
     private $login = null;
     public function __construct(LoginService $login) {
         $this->login = $login;
     }
-    
+
     public function getLoginInfo() {
         $user = $this->login->getUser();
         if ($user === null) {

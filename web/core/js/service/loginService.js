@@ -1,7 +1,7 @@
-var AFE;
-(function (AFE) {
-    var DmoBundle;
-    (function (DmoBundle) {
+var Emeric0101;
+(function (Emeric0101) {
+    var PHPAngular;
+    (function (PHPAngular) {
         var Service;
         (function (Service) {
             var LoginService = (function () {
@@ -70,7 +70,7 @@ var AFE;
                         callback();
                         return;
                     }
-                    this.$ajaxService.get(this.$url.makeApi("User", "getLoginInfo"), {}, function (r) {
+                    this.$ajaxService.get(this.$url.makeApi("Login", "getLoginInfo"), {}, function (r) {
                         var data = r.data;
                         $this.logged = true;
                         if (data.success === true && typeof (data.user) !== "undefined") {
@@ -91,6 +91,6 @@ var AFE;
             }());
             Service.LoginService = LoginService;
             phpangularModule.service("LoginService", LoginService);
-        })(Service = DmoBundle.Service || (DmoBundle.Service = {}));
-    })(DmoBundle = AFE.DmoBundle || (AFE.DmoBundle = {}));
-})(AFE || (AFE = {}));
+        })(Service = PHPAngular.Service || (PHPAngular.Service = {}));
+    })(PHPAngular = Emeric0101.PHPAngular || (Emeric0101.PHPAngular = {}));
+})(Emeric0101 || (Emeric0101 = {}));
