@@ -1,13 +1,9 @@
 {
     "name": "dmo",
     "dependencies": {
-        "jquery": "latest",
 		"angular": "latest",
 		"angular-mocks": "latest",
 		"angular-route": "latest",
-		"angular-file-upload": "latest",
-        "angular-bootstrap": "latest",
-		"jasmine": "latest",
-		"bootstrap": "latest"
+		"jasmine": "latest"
     }
 }
