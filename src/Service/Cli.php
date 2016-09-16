@@ -200,9 +200,23 @@ class Cli extends AService {
         $packagePath = $cwd . '/vendor/emeric0101/phpangular/';
         @mkdir($cwd . '/web');
         @mkdir($cwd . '/web/js');
+        @mkdir($cwd . '/web/core');
+        @mkdir($cwd . '/web/lib');
+        @mkdir($cwd . '/web/template');
         try {
-            copy($packagePath . 'PHPAngularConfig.php', $cwd . '/PHPAngularConfig.php');
-            $this->recurse_copy($packagePath . 'web', $cwd . '/web');
+            // This file must be created ONLY if not exist
+            $this->copyIfNotExists($packagePath . 'PHPAngularConfig.php', $cwd . '/PHPAngularConfig.php');
+
+            $this->recurse_copy($packagePath . 'web/core', $cwd . '/web/core');
+            $this->recurse_copy($packagePath . 'web/lib', $cwd . '/web/lib');
+            $this->recurse_copy($packagePath . 'web/template', $cwd . '/web/template');
+
+            $this->copyIfNotExists($packagePath . 'web/config.ts', $cwd . '/web/config.ts');
+            $this->copyIfNotExists($packagePath . 'web/bower.json', $cwd . '/web/bower.json');
+            $this->copyIfNotExists($packagePath . 'web/.htaccess', $cwd . '/web/.htaccess');
+            copy($packagePath . 'web/api.php', $cwd . '/web/api.php');
+            copy($packagePath . 'web/.gitignore', $cwd . '/web/.gitignore');
+
         }
         catch (CliCopyError $e) {
             echo 'Unable to copy web directory : ' . $e->getMessage() . PHP_EOL;
@@ -214,6 +228,14 @@ class Cli extends AService {
         @mkdir($cwd . '/src/layout');
         copy($packagePath . 'src/layout/index.php', $cwd . '/src/layout/index.php');
 
+    }
+    private function copyIfNotExists($file, $dst) {
+        if (!file_exists($dst)) {
+            copy($file, $dst);
+        }
+        else {
+            echo 'Skipping ' . $dst . ' : already exists' . PHP_EOL;
+        }
     }
 
     private function getEntities() {
