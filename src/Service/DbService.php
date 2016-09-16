@@ -21,10 +21,10 @@ class DbService extends AService {
             'dbname'   => DOCTRINE_DB,
         );
 
-        // Add interface 
+        // Add interface
         $evm  = new \Doctrine\Common\EventManager;
         $rtel = new \Doctrine\ORM\Tools\ResolveTargetEntityListener;
-        foreach (Emeric0101\PHPAngular\Config::$ResolveTargetEntities as $interface => $target) {
+        foreach (\Emeric0101\PHPAngular\Config::$ResolveTargetEntities as $interface => $target) {
             $rtel->addResolveTargetEntity($interface, $target, array());
 
         }
