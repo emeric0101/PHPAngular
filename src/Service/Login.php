@@ -14,7 +14,7 @@ class Login extends AService {
     */
     private function getUserFromSession() {
         $sessionid = $this->request->session('usersid', '');
-        return $this->entityManager->getRepository("Emeric0101\PHPAngular\Entity\Session")->FindBySid($sessionid);
+        return $this->entityManager->getRepository("Emeric0101\PHPAngular\Entity\Session")->findBySid($sessionid);
     }
 
     function __construct(DbService $db, Request $request) {

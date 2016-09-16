@@ -21,7 +21,18 @@ class DbService extends AService {
             'dbname'   => DOCTRINE_DB,
         );
 
+        // Add interface 
+        $evm  = new \Doctrine\Common\EventManager;
+        $rtel = new \Doctrine\ORM\Tools\ResolveTargetEntityListener;
+        foreach (Emeric0101\PHPAngular\Config::$ResolveTargetEntities as $interface => $target) {
+            $rtel->addResolveTargetEntity($interface, $target, array());
+
+        }
+        // Adds a target-entity class
+        // Add the ResolveTargetEntityListener
+        $evm->addEventListener(Doctrine\ORM\Events::loadClassMetadata, $rtel);
+
         // obtaining the entity manager
-        $this->entityManager = EntityManager::create($conn, $config);
+        $this->entityManager = EntityManager::create($conn, $config, $evm);
     }
 }
