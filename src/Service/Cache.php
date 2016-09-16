@@ -59,7 +59,8 @@ class Cache extends AService {
     *   @param $test boolean Get only test file
     */
     public function generate($extension = 'js') {
-        $dirs = [APP_DIR . 'web/config.js'];
+        $dirs = [];
+        if ($extension == '$js') {$dirs[] = APP_DIR . 'web/config.js';}
         static::scandirOB(APP_DIR . 'web/core', $extension, $dirs);
         static::scandirOB(APP_DIR . 'web/' . $extension, $extension, $dirs);
         static::scandirOB(APP_DIR . 'web/template', $extension, $dirs);
