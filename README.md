@@ -12,7 +12,8 @@
 - [x] RepositoryService client side
 - [x] Custom method call by the repository service to get data from server
 - [ ] Post array recursivly for the request class on server
-- [-] Right management and user loggin
+- [x] user loggin
+- [ ] Right management
 - [x] Possibility to combine find request from js to avoid multiple network call
 - [ ] Possibility to combine save request from js
 - [ ] Unit test with Yasmine
@@ -227,14 +228,14 @@ Obviously, this method is useless because it does exactly the same as findById()
 You can use some angular modules by adding them into phpangularmodules (web/config.ts).
 It is like doing `angular.module('somemodule', phpangularmodules);`
 
-`javascript
+```javascript
 var phpangularmodules = ['angular-file-upload', 'anguar-recaptcha'];
-`
+```
 
 #### User loggin
 ##### Server side
 You just have to create an entity which implement IUser (don't forget to extends EntityAbstract)
-`PHP
+```PHP
 namespace Emeric0101\PHPAngular\Entity;
 use Emeric0101\PHPAngular\Entity\EntityAbstract;
 
@@ -247,7 +248,7 @@ interface IUser
     public function getPassword();
     public function setHashedPassword(string $p);
 }
-`
+```
 
 PHPAngular provide login and logout method by the controller "Login". But you have to create the user subscribe yourself.
 In Emeric0101\PHPAngular\Service\Login, you have some methods which help you to check user account.
