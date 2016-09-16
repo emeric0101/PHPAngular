@@ -1,7 +1,7 @@
 <?php
 namespace Emeric0101\PHPAngular\Controller;
 use Emeric0101\PHPAngular\Controller\Controller;
-use Emeric0101\PHPAngular\Service\LoginService;
+use Emeric0101\PHPAngular\Service\Login as LoginService;
 
 class Login extends Controller {
     private $login = null;

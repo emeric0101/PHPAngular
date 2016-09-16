@@ -1,5 +1,5 @@
 <?php
-namespace AFE\DmoBundle\Service;
+namespace Emeric0101\PHPAngular\Service;
 use Emeric0101\PHPAngular\Service\DbService;
 use Emeric0101\PHPAngular\Service\Request;
 use Emeric0101\PHPAngular\Service\Singleton;
@@ -14,7 +14,7 @@ class Login extends AService {
     */
     private function getUserFromSession() {
         $sessionid = $this->request->session('usersid', '');
-        return $this->entityManager->getRepository("Emeric0101\PHPAngular\Entity\Session")->getUserBySid($sessionid);
+        return $this->entityManager->getRepository("Emeric0101\PHPAngular\Entity\Session")->FindBySid($sessionid);
     }
 
     function __construct(DbService $db, Request $request) {
