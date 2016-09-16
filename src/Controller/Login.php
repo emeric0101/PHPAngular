@@ -5,6 +5,17 @@ class Login extends Emeric0101\PHPAngular\Controller\Controller {
     public function __construct(LoginService $login) {
         $this->login = $login;
     }
+    
+    public function getLoginInfo() {
+        $user = $this->login->getUser();
+        if ($user === null) {
+            $this->response->setError("NOT_LOGGED");
+            return false;
+        }
+
+        $this->response->setResponse("user", $user);
+    }
+
     public function logout() {
         if (!$this->login->logout()) {
             $this->response->setError("NOT_LOGGED");
