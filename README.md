@@ -12,7 +12,7 @@
 - [x] RepositoryService client side
 - [x] Custom method call by the repository service to get data from server
 - [ ] Post array recursivly for the request class on server
-- [ ] Right management
+- [-] Right management and user loggin
 - [x] Possibility to combine find request from js to avoid multiple network call
 - [ ] Possibility to combine save request from js
 - [ ] Unit test with Yasmine
@@ -230,3 +230,29 @@ It is like doing `angular.module('somemodule', phpangularmodules);`
 `javascript
 var phpangularmodules = ['angular-file-upload', 'anguar-recaptcha'];
 `
+
+#### User loggin
+##### Server side
+You just have to create an entity which implement IUser (don't forget to extends EntityAbstract)
+`PHP
+namespace Emeric0101\PHPAngular\Entity;
+use Emeric0101\PHPAngular\Entity\EntityAbstract;
+
+interface IUser
+{
+    public function setMail($mail);
+    public function getMail();
+
+
+    public function getPassword();
+    public function setHashedPassword(string $p);
+}
+`
+
+PHPAngular provide login and logout method by the controller "Login". But you have to create the user subscribe yourself.
+In Emeric0101\PHPAngular\Service\Login, you have some methods which help you to check user account.
+For password hash, you can use Emeric0101\PHPAngular\Service\Login::hashPassword(string)
+
+##### Client side
+You have to implement IUser too (but the entity MUST be the same than the server !!!)
+Like the server side, you have a Login service which provide you all methods you'll need for user login and logout.
