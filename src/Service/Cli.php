@@ -3,6 +3,11 @@ namespace Emeric0101\PHPAngular\Service;
 use Doctrine\Common\Annotations\AnnotationReader;
 class CliCopyError extends \Exception {}
 class Cli extends AService {
+    private $targetJs = '';
+    public function __construct() {
+        $this->targetJs = implode('.', explode('\\', substr(\Emeric0101\PHPAngular\Config::PHPANGULAR_BUNDLE, 1)));
+
+    }
     private $entities = [];
 
     private function recurse_copy($src,$dst, $force = true) {
@@ -66,91 +71,39 @@ class Cli extends AService {
         return $code;
     }
     private function createOneToOne($name, $targetEntity) {
-        $targetJs = implode('.', explode('\\', $targetEntity));
-        $code = '  		private ' . $name . ' :' . $targetJs . ' = null;'. PHP_EOL;
-        $code .= '		get' . ucFirst($name) . '() : ' . $targetJs . ' {' . PHP_EOL;
+        $typeFnc = implode('.', explode('\\', $targetEntity));
+        $code = '  		private ' . $name . ' :' . $typeFnc . ' = null;'. PHP_EOL;
+        $code .= '		get' . ucFirst($name) . '() : ' . $typeFnc . ' {' . PHP_EOL;
         $code .= '			return this.foreignKey(\'' . $name . '\');' . PHP_EOL;
         $code .= '		}' . PHP_EOL;
-        $code .= '      set' . ucFirst($name) . '(v : ' . $targetJs . ') {' . PHP_EOL;
+        $code .= '      set' . ucFirst($name) . '(v : ' . $typeFnc . ') {' . PHP_EOL;
         $code .= '          this.setValue(\'' . $name . '\', v);' . PHP_EOL;
         $code .= '      }' . PHP_EOL;
         return $code;
     }
     private function createOneToMany($name, $targetEntity) {
-        $targetJs = implode('.', explode('\\', $targetEntity));
-        $code = '  		private ' . $name . ' :' . $targetJs . ' = null;'. PHP_EOL;
-        $code .= '		get' . ucFirst($name) . '() : ' . $targetJs . ' {' . PHP_EOL;
+        $typeFnc = implode('.', explode('\\', $targetEntity));
+        $code = '  		private ' . $name . ' :' . $typeFnc . ' = null;'. PHP_EOL;
+        $code .= '		get' . ucFirst($name) . '() : ' . $typeFnc . ' {' . PHP_EOL;
         $code .= '			return this.foreignKeys(\'' . $name . '\');' . PHP_EOL;
         $code .= '		}' . PHP_EOL;
-        $code .= '      set' . ucFirst($name) . '(v : ' . $targetJs . '[]) {' . PHP_EOL;
+        $code .= '      set' . ucFirst($name) . '(v : ' . $typeFnc . '[]) {' . PHP_EOL;
         $code .= '          this.setValue(\'' . $name . '\', v);' . PHP_EOL;
         $code .= '      }' . PHP_EOL;
         return $code;
     }
 
+
+
     function install() {
         echo 'Phangular.io - Generate entities' . PHP_EOL;
-        $targetJs = implode('.', explode('\\', substr(PHPANGULAR_BUNDLE, 1)));
-        $cwd = getcwd();
+
         $this->createWeb(false);
-        $this->createEntityFactory($targetJs);
-        $className = PHPANGULAR_BUNDLE . '\\Entity\\';
-
-
+        $this->createEntityFactory($this->targetJs);
         echo PHP_EOL;
         $this->entities = $this->getEntities();
         foreach ($this->entities as $entity) {
-            if ($entity == '') {continue;}
-            // path of the class
-            $path = $cwd . '/web/js/Entity/' . $entity . '.ts';
-            // name of the class
-            $classNameCurrent = $className . $entity;
-            echo 'Class ' . $classNameCurrent . '...';
-            // skip if exist
-            if (file_exists($path)) {
-                echo 'file already exist' . PHP_EOL;
-                continue;
-            }
-            else {
-                echo PHP_EOL;
-            }
-
-            $class = new $classNameCurrent();
-            $code = 'module ' . $targetJs . '.Entity {' . PHP_EOL;
-            $code .= '    export class '. $entity . ' extends Emeric0101.PHPAngular.Entity.Model {' . PHP_EOL;
-
-            $reflectionClass = new \ReflectionClass($classNameCurrent);
-            $annotationReader = new AnnotationReader($reflectionClass);
-            foreach ($reflectionClass->getProperties() as $property) {
-                if ($property->name == 'id') {continue;}
-                $methodInfo = $annotationReader->getPropertyAnnotations($property);
-                switch (get_class($methodInfo[0])) {
-                    case 'Column':
-                        $code .= $this->createAttributes($property->name, $methodInfo[0]->type);
-                    break;
-                    case 'OneToOne':
-                        $code .= $this->createOneToOne($property->name, $methodInfo[0]->targetEntity);
-
-                    break;
-                    case 'OneToMany':
-                        $code .= $this->createOneToMany($property->name, $methodInfo[0]->targetEntity);
-                    break;
-                    case 'ManyToMany':
-                    break;
-                    case 'ManyToOne':
-                        $code .= $this->createOneToOne($property->name, $methodInfo[0]->targetEntity);
-
-                    break;
-                    default:
-                        throw new \Exception('Unable to find the type of this attribute');
-                }
-            }
-            $code .= '        constructor(repositoryService) {' . PHP_EOL;
-            $code .= '          super("' . $entity . '", repositoryService);' . PHP_EOL;
-            $code .= '        }' . PHP_EOL;
-            $code .= '  }' . PHP_EOL;
-            $code .= '}' . PHP_EOL;
-            $this->file_force_contents($path, $code);
+            $this->updateEntity($entity, false);
         }
         echo PHP_EOL . 'Okay, everything is ready but.... you have to do a last little thing' . PHP_EOL;
         echo 'You have to run some commands : ' . PHP_EOL;
@@ -164,17 +117,81 @@ class Cli extends AService {
         $this->createWeb();
     }
 
+    function updateEntity($entity, $force = true) {
+        $cwd = getcwd();
+        $className = \Emeric0101\PHPAngular\Config::PHPANGULAR_BUNDLE . '\\Entity\\';
+        if ($entity == '') {return false;}
+        // path of the class
+        $path = $cwd . '/web/js/Entity/' . $entity . '.ts';
+        // name of the class
+        $classNameCurrent = $className . $entity;
+        echo 'Class ' . $classNameCurrent . '...';
+        // skip if exist
+        if (file_exists($path) && !$force) {
+            echo 'file already exist' . PHP_EOL;
+            return false;
+        }
+        else {
+            echo PHP_EOL;
+        }
+        if (!class_exists($classNameCurrent)) {
+            echo 'ERROR : class' . $classNameCurrent . ' does not exist !' . PHP_EOL;
+            return false;
+        }
+        $class = new $classNameCurrent();
+        $code = 'module ' . $this->targetJs . '.Entity {' . PHP_EOL;
+        $code .= '    export class '. $entity . ' extends Emeric0101.PHPAngular.Entity.Model {' . PHP_EOL;
+
+        $reflectionClass = new \ReflectionClass($classNameCurrent);
+        $annotationReader = new AnnotationReader($reflectionClass);
+        foreach ($reflectionClass->getProperties() as $property) {
+            if ($property->name == 'id') {continue;}
+            $methodInfo = $annotationReader->getPropertyAnnotations($property);
+            switch (get_class($methodInfo[0])) {
+                case 'Column':
+                    $code .= $this->createAttributes($property->name, $methodInfo[0]->type);
+                break;
+                case 'OneToOne':
+                    $code .= $this->createOneToOne($property->name, $methodInfo[0]->targetEntity);
+
+                break;
+                case 'OneToMany':
+                    $code .= $this->createOneToMany($property->name, $methodInfo[0]->targetEntity);
+                break;
+                case 'ManyToMany':
+                break;
+                case 'ManyToOne':
+                    $code .= $this->createOneToOne($property->name, $methodInfo[0]->targetEntity);
+
+                break;
+                default:
+                    throw new \Exception('Unable to find the type of this attribute');
+            }
+        }
+        $code .= '        constructor(repositoryService) {' . PHP_EOL;
+        $code .= '          super("' . $entity . '", repositoryService);' . PHP_EOL;
+        $code .= '        }' . PHP_EOL;
+        $code .= '  }' . PHP_EOL;
+        $code .= '}' . PHP_EOL;
+        $this->file_force_contents($path, $code);
+    }
+
 
     function main($argv) {
         $method = 'help';
         if (count($argv) > 1) {
             $method = $argv[1];
         }
-        $this->$method();
+        $argMethod = null;
+        if (count($argv) > 2) {
+            $argMethod = $argv[2];
+        }
+        $this->$method($argMethod);
     }
 
     function help() {
-        echo 'Help : you can use "install", "update"' . PHP_EOL;
+        echo 'Help : you can use "install", "update" or "updateEntity"' . PHP_EOL;
+        echo 'For updateEntity, we have to provide the name of the entity : updateEntity User';
     }
 
     private function createWeb() {
@@ -184,6 +201,7 @@ class Cli extends AService {
         @mkdir($cwd . '/web');
         @mkdir($cwd . '/web/js');
         try {
+            copy($packagePath . 'PHPAngularConfig.php', $cwd . '/PHPAngularConfig.php');
             $this->recurse_copy($packagePath . 'web', $cwd . '/web');
         }
         catch (CliCopyError $e) {

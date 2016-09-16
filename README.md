@@ -5,7 +5,7 @@
 ### Changelog
 - Using php-di for injection (you must update the api.php into /web)
 
-### Todo
+### Todo for 0.2
 - [x] Using php-di for dependency injection
 - [x] EntityManager client side
 - [x] Entity generator from server client side
@@ -16,6 +16,8 @@
 - [x] Possibility to combine find request from js to avoid multiple network call
 - [ ] Possibility to combine save request from js
 - [ ] Unit test with Yasmine
+- [ ] Using systemJS
+- [ ] Compatibility with Angular 2
 
 ### Samples
 This website uses my library:
@@ -36,8 +38,36 @@ Use composer with `composer require phpangular`
 
 #### boostrap.php
 You need to setup the mysql and the namespace login settings in **yourapp/bootstrap.php**
-Set your *targetEntity*, this is the name of your bundle, every Entities must be in this namespace but with "Entity" after
-For example, the vendor name is Emeric, the bundle name is test, the entity is Post, you should have Emeric\test\Entity\Post
+Your bootstrap.php must be like this
+`PHP
+// bootstrap.php
+define('APP_DIR', '');
+define('PHPANGULAR_DEBUG', true);
+define('URL_STORAGE', 'web/upload/');
+define('URL_ABSOLUTE', 'http://localhost/phpangular-test/web/');
+// mysql config
+define('DOCTRINE_HOST', 'localhost');
+define('DOCTRINE_USER', 'root');
+define('DOCTRINE_PASSWORD', '');
+define('DOCTRINE_DB', 'phpangular');
+define('resetWebDir', false);
+
+session_start();
+require_once "PHPAngularConfig.php";
+require_once "vendor/autoload.php";
+
+`
+
+#### PHPAngularConfig.php
+Set your *PHPANGULAR_BUNDLE*, this is the name of your bundle. This must be absolute like '\\Emeric0101\\PHPAngular'
+
+If you need to add some js or css file, you can add them in this folder, for instance :
+`PHP
+static $jsModule = [
+    'bower_components/boostrap/dist/bootstrap.min.js',
+    'bower_components/jquery/dist/jquery.min.js'
+];
+`
 
 #### Doctrine
 Now you have to create the Entity with doctrine [Create Entities](http://symfony.com/doc/current/doctrine.html#creating-an-entity-class) ** You must use Annotation**
@@ -192,3 +222,11 @@ public function someFunction($id = 0) {
 }
 ```
 Obviously, this method is useless because it does exactly the same as findById().
+
+#### Angular module
+You can use some angular modules by adding them into phpangularmodules (web/config.ts).
+It is like doing `angular.module('somemodule', phpangularmodules);`
+
+`javascript
+var phpangularmodules = ['angular-file-upload', 'anguar-recaptcha'];
+`

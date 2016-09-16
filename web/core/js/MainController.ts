@@ -1,4 +1,6 @@
-var phpangularModule = angular.module('phpangularModule', ['ngRoute']);
+var phpangularmodules = phpangularmodules || [];
+phpangularmodules.push('ngRoute');
+var phpangularModule = angular.module('phpangularModule', phpangularmodules);
 
 module PhpangularModule {
 

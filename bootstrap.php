@@ -10,7 +10,9 @@ define('DOCTRINE_HOST', 'localhost');
 define('DOCTRINE_USER', 'root');
 define('DOCTRINE_PASSWORD', '');
 define('DOCTRINE_DB', 'phpangular');
-define('PHPANGULAR_BUNDLE', 'Emeric0101\\PHPAngular');
+
+
 
 session_start();
+require_once "PHPAngularConfig.php";
 require_once "vendor/autoload.php";

@@ -12,8 +12,8 @@ class ControllerService extends AService{
     }
 
     public function getControllerName($controllerGet) {
-        if (class_exists(PHPANGULAR_BUNDLE . '\\Controller\\' . $controllerGet)) {
-			$controllerName = PHPANGULAR_BUNDLE . '\\Controller\\' . $controllerGet;
+        if (class_exists(\Emeric0101\PHPAngular\Config::PHPANGULAR_BUNDLE . '\\Controller\\' . $controllerGet)) {
+			$controllerName = \Emeric0101\PHPAngular\Config::PHPANGULAR_BUNDLE . '\\Controller\\' . $controllerGet;
         }
         else if (class_exists('Emeric0101\\PHPAngular\\Controller\\' . $controllerGet)) {
 			$controllerName = 'Emeric0101\\PHPAngular\\Controller\\' . $controllerGet;
