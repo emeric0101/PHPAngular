@@ -10,7 +10,7 @@ class DbService extends AService {
     }
     public function __construct() {
         $isDevMode = true;
-        $config = Setup::createAnnotationMetadataConfiguration(array("src/Entity"), $isDevMode);
+        $config = Setup::createAnnotationMetadataConfiguration(array("src/Entity",'vendor/Emeric0101/PHPAngular/src/Entity'), $isDevMode);
 
         // database configuration parameters
         $conn = array(
@@ -30,7 +30,7 @@ class DbService extends AService {
         }
         // Adds a target-entity class
         // Add the ResolveTargetEntityListener
-        $evm->addEventListener(Doctrine\ORM\Events::loadClassMetadata, $rtel);
+        $evm->addEventListener(\Doctrine\ORM\Events::loadClassMetadata, $rtel);
 
         // obtaining the entity manager
         $this->entityManager = EntityManager::create($conn, $config, $evm);

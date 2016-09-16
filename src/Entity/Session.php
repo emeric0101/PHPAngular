@@ -2,7 +2,7 @@
 
 namespace Emeric0101\PHPAngular\Entity;
 use Emeric0101\PHPAngular\Entity\EntityAbstract;
-
+use Emeric0101\PHPAngular\Entity\IUser;
 use Doctrine\Mapping as ORM;
 
 /**
@@ -78,7 +78,7 @@ class Session extends EntityAbstract
     public function getUser() {
         return $this->user;
     }
-    public function setUser(User $u) {
+    public function setUser(IUser $u) {
         $this->user = $u;
         return $this;
     }
