@@ -28,11 +28,11 @@ https://www.amelieferrari.fr
 #### Composer config
 Define all namespace we will use for Entity in composer.json (you can use the namespace you want but it must be like XX\XX\Entity, and other class you may need like Controller, Service, ...)
 
-`
+```JSON
     "psr-4": {
         "Emeric0101\\PHPAngular\\Entity\\": "src/Entity/"
     }
-`
+```
 
 
 Use composer with `composer require phpangular`
@@ -40,7 +40,7 @@ Use composer with `composer require phpangular`
 #### boostrap.php
 You need to setup the mysql and the namespace login settings in **yourapp/bootstrap.php**
 Your bootstrap.php must be like this
-`PHP
+```PHP
 // bootstrap.php
 define('APP_DIR', '');
 define('PHPANGULAR_DEBUG', true);
@@ -57,18 +57,18 @@ session_start();
 require_once "PHPAngularConfig.php";
 require_once "vendor/autoload.php";
 
-`
+```
 
 #### PHPAngularConfig.php
 Set your *PHPANGULAR_BUNDLE*, this is the name of your bundle. This must be absolute like '\\Emeric0101\\PHPAngular'
 
 If you need to add some js or css file, you can add them in this folder, for instance :
-`PHP
+```PHP
 static $jsModule = [
     'bower_components/boostrap/dist/bootstrap.min.js',
     'bower_components/jquery/dist/jquery.min.js'
 ];
-`
+```
 
 #### Doctrine
 Now you have to create the Entity with doctrine [Create Entities](http://symfony.com/doc/current/doctrine.html#creating-an-entity-class) ** You must use Annotation**
