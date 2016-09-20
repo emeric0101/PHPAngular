@@ -1,11 +1,11 @@
 module Emeric0101.PHPAngular.Service {
     export class LoginService {
         static $inject = ['AjaxService', 'UrlService', 'RepositoryService'];
-        private user : Emeric0101.PHPAngular.Entity.IUser = null;
-        private logged = false; // if the request has already been sent
-        private requesting = false;
-        private waitingCb : ((user : Emeric0101.PHPAngular.Entity.IUser) => void)[] = [];
-
+        protected user : Emeric0101.PHPAngular.Entity.IUser = null;
+        protected logged = false; // if the request has already been sent
+        protected requesting = false;
+        protected waitingCb : ((user : Emeric0101.PHPAngular.Entity.IUser) => void)[] = [];
+        
         login(
             mail : string,
             pass : string,
@@ -93,9 +93,9 @@ module Emeric0101.PHPAngular.Service {
 
 
         }
-        constructor(private $ajaxService : Emeric0101.PHPAngular.Service.AjaxService,
-            private $url : Emeric0101.PHPAngular.Service.UrlService,
-            private $repo) {
+        constructor(protected $ajaxService : Emeric0101.PHPAngular.Service.AjaxService,
+            protected $url : Emeric0101.PHPAngular.Service.UrlService,
+            protected $repo) {
         }
     }
     phpangularModule.service("LoginService", LoginService);

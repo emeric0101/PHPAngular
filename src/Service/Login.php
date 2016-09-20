@@ -7,8 +7,8 @@ use AFE\DmoBundle\Entity\Variable;
 use Emeric0101\PHPAngular\Service\AService;
 
 class Login extends AService {
-    private $user = null;
-    private $entityManager = null;
+    protected $user = null;
+    protected $entityManager = null;
 
     /** try to find the logged user with sessionid
     */
