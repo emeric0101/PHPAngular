@@ -12,10 +12,15 @@ class Login extends AService {
 
     /** try to find the logged user with sessionid
     */
-    private function getUserFromSession() {
-        $sessionid = $this->request->session('usersid', '');
+    private function getUserFromSession($sid = '') {
+		if ($sid == '') {
+			$sessionid = $this->request->session('usersid', '');
+		}
+		else {
+			$sessionid = $sid;
+		}
         $session = $this->entityManager->getRepository("Emeric0101\PHPAngular\Entity\Session")->findBySid($sessionid);
-        if (empty($session)) {
+		if (empty($session)) {
             return null;
         }
         return $session[0]->getUser();
@@ -24,7 +29,9 @@ class Login extends AService {
     function __construct(DbService $db, Request $request) {
         $this->entityManager = $db->getEntityManager();
         $this->request = $request;
-        $this->user = $this->getUserFromSession();
+		// need this to link IUser to User :/ bug in doctrine
+        $this->entityManager->getRepository("Emeric0101\PHPAngular\Entity\Session")->findBySid(null);
+
     }
 
     function logout() {
@@ -50,6 +57,9 @@ class Login extends AService {
     }
 
     function login($mail, $password, $stayConnected) {
+
+
+
 
         $user = $this->entityManager->getRepository("Emeric0101\PHPAngular\Entity\IUser")->findByMail($mail);
         if (empty($user)) {
@@ -85,7 +95,10 @@ class Login extends AService {
     /**
     * Get the current logged user or null
     */
-    function getUser() {
+    function getUser($sid = '') {
+		if ($this->user == null) {
+			$this->user = $this->getUserFromSession($sid);
+		}
         return $this->user;
     }
 
