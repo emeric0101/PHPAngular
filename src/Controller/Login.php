@@ -30,10 +30,12 @@ class Login extends Controller {
     public function login() {
         $mail = $this->request->post("mail", "");
         $stayConnected = $this->request->post("stay", "");
-        if (!$this->login->login($mail, $this->request->post("password", ""), $stayConnected)) {
+        $sid = $this->login->login($mail, $this->request->post("password", ""), $stayConnected);
+        if ($sid === false) {
             $this->response->setError("BAD_LOGIN");
             return false;
         }
+        $this->response->setResponse('sessionid',$sid );
         return true;
     }
 }

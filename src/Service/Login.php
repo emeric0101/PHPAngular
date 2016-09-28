@@ -68,7 +68,7 @@ class Login extends AService {
         $this->entityManager->persist($session);
         $this->entityManager->flush();
         $this->user = $user[0];
-        return true;
+        return $sid;
     }
     function loginWithUser(\Emeric0101\PHPAngular\Entity\IUser $user) {
         $session = new \Emeric0101\PHPAngular\Entity\Session();
