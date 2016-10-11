@@ -28,11 +28,11 @@ class Cli extends AService {
         foreach ($this->entities as $entity) {
             $this->entity->updateEntity($entity, false);
         }
+        $this->routing->createRoute();
+
         echo PHP_EOL . 'Okay, everything is ready but.... you have to do a last little thing' . PHP_EOL;
         echo 'You have to run some commands : ' . PHP_EOL;
-        echo 'cd web' . PHP_EOL;
-        echo 'bower install' . PHP_EOL;
-        echo 'Then, you have to compile everything with Typescript compiler (command "tsc")' . PHP_EOL;
+        echo 'Then you can npm start' . PHP_EOL;
 
     }
 

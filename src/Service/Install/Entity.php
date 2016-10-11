@@ -14,8 +14,8 @@ class Entity {
 
     public function createEntityFactory($entities) {
         $code = '
-			import { Model } from "../Entity/AEntity";
-			import { RepositoryService } from "./repository.service";
+			import { Model } from "phpangular/Entity/AEntity";
+			import { RepositoryService } from "phpangular/Service/repository.service";
 			';
 			foreach ($entities as $entity) {
 				$code .= 'import { ' . $entity . ' } from "../Entity/' . $entity . '"'. PHP_EOL;
@@ -121,9 +121,14 @@ class Entity {
 
 
 
-        $code = 'import { Model } from "./AEntity";' . PHP_EOL;
+        $code = 'import { Model } from "phpangular/Entity/AEntity";' . PHP_EOL;
 		foreach ($importEntities as $import) {
-			$code .= 'import {' . $import . ' } from "./' . $import . '";' . PHP_EOL;
+			if ($import == 'IUser') {
+				$code .= 'import {' . $import . ' } from "phpangular/Entity/' . $import . '";' . PHP_EOL;
+			}
+			else {
+				$code .= 'import {' . $import . ' } from "./' . $import . '";' . PHP_EOL;
+			}
 		}
         $code .= 'export class '. $entity . ' extends Model {' . PHP_EOL;
 		$code .= '	protected name = "' . $entity . '";' . PHP_EOL;
