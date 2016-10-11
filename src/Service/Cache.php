@@ -48,7 +48,7 @@ class Cache extends AService {
         $content =  ob_get_contents();
         ob_end_clean();
         if (!PHPANGULAR_DEBUG) {
-            static::file_force_contents(APP_DIR . 'web/index.php', $content);
+            static::file_force_contents(APP_DIR . 'index.php', $content);
         }
         return $content;
     }
@@ -59,6 +59,7 @@ class Cache extends AService {
     *   @param $test boolean Get only test file
     */
     public function generate($extension = 'js') {
+		return '';
         $dirs = [];
         if ($extension == 'js') {$dirs[] = APP_DIR . 'web/config.js';}
         static::scandirOB(APP_DIR . 'web/core', $extension, $dirs);

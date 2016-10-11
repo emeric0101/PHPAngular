@@ -1,9 +1,0 @@
-{
-    "name": "dmo",
-    "dependencies": {
-		"angular": "latest",
-		"angular-mocks": "latest",
-		"angular-route": "latest",
-		"jasmine": "latest"
-    }
-}
