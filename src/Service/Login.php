@@ -10,17 +10,11 @@ class Login extends AService {
     protected $user = null;
     protected $entityManager = null;
 
-    /** try to find the logged user with sessionid
+    /** try to find the logged user with sid
     */
-    private function getUserFromSession($sid = '') {
-		if ($sid == '') {
-			$sessionid = $this->request->session('usersid', '');
-		}
-		else {
-			$sessionid = $sid;
-		}
-        $session = $this->entityManager->getRepository("Emeric0101\PHPAngular\Entity\Session")->findBySid($sessionid);
-		if (empty($session)) {
+    private function getUserFromSession($sid) {
+        $session = $this->entityManager->getRepository("Emeric0101\PHPAngular\Entity\Session")->findBySid($sid);
+        if (empty($session)) {
             return null;
         }
         return $session[0]->getUser();
@@ -95,8 +89,18 @@ class Login extends AService {
     /**
     * Get the current logged user or null
     */
-    function getUser($sid = '') {
+    function getUser($sid) {
 		if ($this->user == null) {
+			$this->user = $this->getUserFromSession($sid);
+		}
+        return $this->user;
+    }
+    /**
+    * Get the current logged user or null
+    */
+    function getUserFromPHPSession() {
+		if ($this->user == null) {
+            $sid = $this->request->session('usersid', '');
 			$this->user = $this->getUserFromSession($sid);
 		}
         return $this->user;

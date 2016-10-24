@@ -10,9 +10,14 @@ class Login extends Controller {
     }
 
     public function getLoginInfo() {
-        $sid = $this->request->get('sessionid', '');
-
-        $user = $this->login->getUser($sid);
+		$sid = $this->request->get('sessionid', '');
+		if ($sid == '') {
+			$sessionid = $this->request->session('usersid', '');
+		}
+		else {
+			$sessionid = $sid;
+		}
+        $user = $this->login->getUser($sessionid);
         if ($user === null) {
             $this->response->setError("NOT_LOGGED");
             return false;
