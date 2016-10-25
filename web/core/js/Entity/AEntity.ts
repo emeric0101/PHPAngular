@@ -1,9 +1,33 @@
 
 module Emeric0101.PHPAngular.Entity {
+
+    class ForeignKeyRequest {
+        private callbacks : ((model : Model) => void)[] = [];
+        private done = false;
+        public getDone() {return this.done;}
+        public setDone(s) {
+            this.done = s;
+        }
+        public addCallback(cb : (model : Model) => void) {
+            this.callbacks.push(cb);
+        }
+        public getField() {
+            return this.field;
+        }
+        public getCallbacks() {
+            return this.callbacks;
+        }
+        public constructor(
+            callback : ((model : Model) => void),
+            private field : string
+        ) {
+            this.callbacks.push(callback);
+        }
+    }
+
     export abstract class Model {
         protected id : number;
         private isFromDb: boolean = false;
-        private _foreignKeys : string[] = []; // List of all foreign keys requested
 
         private changed = false; // all base values to detect change
         public getChanged() {
@@ -55,13 +79,14 @@ module Emeric0101.PHPAngular.Entity {
         * @param error callback
         * @param obj object to apply the foreginkey
         */
+        private foreignKeyRequests : ForeignKeyRequest[] = [];
         protected foreignKey(
             field : string,
             success? : (obj : Emeric0101.PHPAngular.Entity.Model) => void,
             error? : () => void,
             obj = null
         ) {
-                if (typeof(success) === 'function' || typeof(error) === 'function') {
+                if ( typeof(error) === 'function') {
                     // Il faut ajouter un systeme qui mette en file les callback pour qu'ils soient rappelé un fois
                     // l'objet chargé, car on peut demander 2x le chargement et l'objet arrive apres donc il faut
                     // appeler les 2 callback !
@@ -71,32 +96,54 @@ module Emeric0101.PHPAngular.Entity {
                     obj = this;
                 }
 
-                if ((obj[field] instanceof Model)) {
-                    return obj[field];
-                }
+
                 error = function() {};
-                success = function() {};
-                var $this = this;
+
+                if (success == undefined) {
+                    success = function() {};
+                }
+
                 var value = obj[field];
                 if (value === null) {
                     return null;
                 }
                 // If the key is already requested (or requested)
-                if ($this._foreignKeys.indexOf(field) !== -1) {
-                    return;
+                for (let request of this.foreignKeyRequests) {
+                    if (request.getField() == field) {
+                        if (request.getDone()) {
+                            success(obj[field]);
+                        }
+                        else {
+                            request.addCallback(success);
+                        }
+                        return obj[field];;
+                    }
                 }
-                $this._foreignKeys.push(field);
+                // if already exist
+                if ((obj[field] instanceof Model)) {
+                    return obj[field];
+                }
+                // create request for multiple callback
+                var request = new ForeignKeyRequest(
+                    success, field
+                )
+                this.foreignKeyRequests.push(request);
+
 
                 if (typeof(value['entity']) === 'undefined') {
                     throw 'Model : foreignKey not an entity !';
                 }
                 var callbackSuccess = function(objReceived) {
                     obj[field] = objReceived;
-                    success(objReceived);
+                    // clear callback
+                    for (let success of request.getCallbacks()) {
+                        success(objReceived);
+                    }
+                    request.setDone(true);
                 };
                 this.repositoryService.findById(value['entity'], value['id'], callbackSuccess, error);
                 return obj[field];
-        }debugger;
+        };
 
         public setValues(values : {}) {
 

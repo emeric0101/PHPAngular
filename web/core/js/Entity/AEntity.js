@@ -4,13 +4,35 @@ var Emeric0101;
     (function (PHPAngular) {
         var Entity;
         (function (Entity) {
+            var ForeignKeyRequest = (function () {
+                function ForeignKeyRequest(callback, field) {
+                    this.field = field;
+                    this.callbacks = [];
+                    this.done = false;
+                    this.callbacks.push(callback);
+                }
+                ForeignKeyRequest.prototype.getDone = function () { return this.done; };
+                ForeignKeyRequest.prototype.setDone = function (s) {
+                    this.done = s;
+                };
+                ForeignKeyRequest.prototype.addCallback = function (cb) {
+                    this.callbacks.push(cb);
+                };
+                ForeignKeyRequest.prototype.getField = function () {
+                    return this.field;
+                };
+                ForeignKeyRequest.prototype.getCallbacks = function () {
+                    return this.callbacks;
+                };
+                return ForeignKeyRequest;
+            }());
             var Model = (function () {
                 function Model(name, repositoryService) {
                     this.name = name;
                     this.repositoryService = repositoryService;
                     this.isFromDb = false;
-                    this._foreignKeys = [];
                     this.changed = false;
+                    this.foreignKeyRequests = [];
                 }
                 Model.prototype.getChanged = function () {
                     return this.changed || !this.isFromDb;
@@ -43,36 +65,53 @@ var Emeric0101;
                 };
                 Model.prototype.foreignKey = function (field, success, error, obj) {
                     if (obj === void 0) { obj = null; }
-                    if (typeof (success) === 'function' || typeof (error) === 'function') {
+                    if (typeof (error) === 'function') {
                         throw "NOT READY YET : foreignKey";
                     }
                     if (obj === null) {
                         obj = this;
                     }
-                    if ((obj[field] instanceof Model)) {
-                        return obj[field];
-                    }
                     error = function () { };
-                    success = function () { };
-                    var $this = this;
+                    if (success == undefined) {
+                        success = function () { };
+                    }
                     var value = obj[field];
                     if (value === null) {
                         return null;
                     }
-                    if ($this._foreignKeys.indexOf(field) !== -1) {
-                        return;
+                    for (var _i = 0, _a = this.foreignKeyRequests; _i < _a.length; _i++) {
+                        var request_1 = _a[_i];
+                        if (request_1.getField() == field) {
+                            if (request_1.getDone()) {
+                                success(obj[field]);
+                            }
+                            else {
+                                request_1.addCallback(success);
+                            }
+                            return obj[field];
+                            ;
+                        }
                     }
-                    $this._foreignKeys.push(field);
+                    if ((obj[field] instanceof Model)) {
+                        return obj[field];
+                    }
+                    var request = new ForeignKeyRequest(success, field);
+                    this.foreignKeyRequests.push(request);
                     if (typeof (value['entity']) === 'undefined') {
                         throw 'Model : foreignKey not an entity !';
                     }
                     var callbackSuccess = function (objReceived) {
                         obj[field] = objReceived;
-                        success(objReceived);
+                        for (var _i = 0, _a = request.getCallbacks(); _i < _a.length; _i++) {
+                            var success_1 = _a[_i];
+                            success_1(objReceived);
+                        }
+                        request.setDone(true);
                     };
                     this.repositoryService.findById(value['entity'], value['id'], callbackSuccess, error);
                     return obj[field];
                 };
+                ;
                 Model.prototype.setValues = function (values) {
                     for (var i in values) {
                         var value = values[i];
