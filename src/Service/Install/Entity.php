@@ -89,7 +89,7 @@ class Entity {
 		$attributeCodes = '';
 		$importEntities = [];
         $reflectionClass = new \ReflectionClass($classNameCurrent);
-        $annotationReader = new AnnotationReader($reflectionClass);
+        $annotationReader = new AnnotationReader();
         foreach ($reflectionClass->getProperties() as $property) {
             if ($property->name == 'id') {continue;}
             $methodInfo = $annotationReader->getPropertyAnnotations($property);
