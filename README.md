@@ -6,6 +6,8 @@
 - Using php-di for injection (you must update the api.php into /web)
 
 ### Todo for 0.2
+- [ ] alias for controller function auto generated
+- [ ] issue with installation (typings is not installed)
 - [x] Using php-di for dependency injection
 - [x] EntityManager client side
 - [x] Entity generator from server client side

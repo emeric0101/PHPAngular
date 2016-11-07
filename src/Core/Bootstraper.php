@@ -13,8 +13,12 @@ class Bootstraper {
         $containerBuilder = new ContainerBuilder;
         $container = $containerBuilder->build();
 
+        $db = $container->get('Emeric0101\PHPAngular\Service\DbService');
+
         $controllerService = new ControllerService($container);
         $controllerService->callController();
         $controllerService->render();
+
+        $db->close();
     }
 }
