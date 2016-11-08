@@ -59,13 +59,13 @@ module Emeric0101.PHPAngular.Service {
             this.persistObjs = [];
         }
 
-        private save(obj : Emeric0101.PHPAngular.Entity.Model, callback : (result) => void) {
+        private save(obj : Emeric0101.PHPAngular.Entity.Model, callback : (result, errorMsg) => void) {
             var $this = this;
             var objs = {};
             var dataToSend = {};
             // if not change in the object
             if (!obj.getChanged()) {
-                callback(true);
+                callback(true, []);
                 return;
             }
             for (var i in obj) {
@@ -95,8 +95,14 @@ module Emeric0101.PHPAngular.Service {
             dataToSend[obj.getName()] = objs;
             this.$ajax.post(this.$url.makeApi(obj.getName(), 'post', obj.getId()), dataToSend, function(r) {
                 var data = r.data;
+                // for handling error
+                let errorMsg = 'OK';
+                if (data['errMsg'] !== undefined) {
+                    errorMsg = data['errMsg'];
+                }
+
                 if (data.success !== true) {
-                    callback(false);
+                    callback(false, errorMsg);
                     return;
                 }
 
@@ -109,10 +115,10 @@ module Emeric0101.PHPAngular.Service {
                     }
                 }
 
-                callback(true);
+                callback(true, []);
             },
             function() {
-                callback(false);
+                callback(false, 'UNABLE_TO_CONNECT');
             })
 
         }
@@ -122,7 +128,7 @@ module Emeric0101.PHPAngular.Service {
         * @param callback (result) => void
         * @param autoclear Avoid autoclear of persisted entities
         */
-        public flush(callback? : (result) => void, autoclear = true) {
+        public flush(callback? : (result, errorMsg) => void, autoclear = true) {
             var $this = this;
             $this.$repo.clearCache();
             if (typeof (callback) === "undefined") {
@@ -137,14 +143,15 @@ module Emeric0101.PHPAngular.Service {
             }
 
             var i = 0;
-            var magicFunction = (response) => {
+            var magicFunction = (response, errorMsg) => {
+
                 if (!response) {
-                    callback(false);
+                    callback(false, errorMsg);
                     return;
                 }
                 i++;
                 if (i>=persistObjs.length) { // break condition
-                    callback(true);
+                    callback(true, errorMsg);
                     return;
                 }
                 this.save(persistObjs[i], magicFunction)

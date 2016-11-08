@@ -64,7 +64,7 @@ var Emeric0101;
                     var objs = {};
                     var dataToSend = {};
                     if (!obj.getChanged()) {
-                        callback(true);
+                        callback(true, []);
                         return;
                     }
                     for (var i in obj) {
@@ -94,8 +94,12 @@ var Emeric0101;
                     dataToSend[obj.getName()] = objs;
                     this.$ajax.post(this.$url.makeApi(obj.getName(), 'post', obj.getId()), dataToSend, function (r) {
                         var data = r.data;
+                        var errorMsg = 'OK';
+                        if (data['errMsg'] !== undefined) {
+                            errorMsg = data['errMsg'];
+                        }
                         if (data.success !== true) {
-                            callback(false);
+                            callback(false, errorMsg);
                             return;
                         }
                         if (typeof (data[obj.getName()]) !== 'undefined') {
@@ -104,9 +108,9 @@ var Emeric0101;
                                 obj[i] = nobj[i];
                             }
                         }
-                        callback(true);
+                        callback(true, []);
                     }, function () {
-                        callback(false);
+                        callback(false, 'UNABLE_TO_CONNECT');
                     });
                 };
                 EntityManager.prototype.flush = function (callback, autoclear) {
@@ -125,14 +129,14 @@ var Emeric0101;
                         $this.clear();
                     }
                     var i = 0;
-                    var magicFunction = function (response) {
+                    var magicFunction = function (response, errorMsg) {
                         if (!response) {
-                            callback(false);
+                            callback(false, errorMsg);
                             return;
                         }
                         i++;
                         if (i >= persistObjs.length) {
-                            callback(true);
+                            callback(true, errorMsg);
                             return;
                         }
                         _this.save(persistObjs[i], magicFunction);
