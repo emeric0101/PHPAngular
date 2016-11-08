@@ -4,11 +4,14 @@ class ControllerService extends AService{
     private $container = null;
     private $request = null;
     private $response = null;
+    private $dbService = null;
     public function __construct($container) {
         $this->container = $container;
 		$container->set('Emeric0101\PHPAngular\Service\ControllerService', $this);
         $this->request = $container->get('Emeric0101\PHPAngular\Service\Request');
         $this->response = $container->get('Emeric0101\PHPAngular\Service\Response');
+        $this->dbService = $container->get('Emeric0101\PHPAngular\Service\DbService');
+
     }
 
     public function getControllerName($controllerGet) {
@@ -57,6 +60,10 @@ class ControllerService extends AService{
         }
         else {
             $this->response->setResponse('success', $ret);
+        }
+        // Logging
+        if (PHPANGULAR_DEBUG) {
+            $this->response->setResponse('debug', $this->dbService->getLog());
         }
     }
 

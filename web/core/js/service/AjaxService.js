@@ -9,19 +9,30 @@ var Emeric0101;
                     this.$http = $http;
                     this.$url = $url;
                 }
+                AjaxService.prototype.callback = function (data, success) {
+                    if (data.data.debug != undefined) {
+                        console.log(data.data.debug);
+                    }
+                    if (typeof (success) === 'function') {
+                        success(data);
+                    }
+                };
                 AjaxService.prototype.get = function (url, data, success, error) {
+                    var _this = this;
                     this.$http({
                         url: url,
                         data: data,
                         method: "GET",
-                    }).then(success, error);
+                    }).then(function (r) { return _this.callback(r, success); }, error);
                 };
                 AjaxService.prototype.post = function (url, data, success, error) {
+                    var _this = this;
+                    if (success === void 0) { success = function (d) { }; }
                     this.$http({
                         url: url,
                         data: data,
                         method: "POST",
-                    }).then(success, error);
+                    }).then(function (r) { return _this.callback(r, success); }, error);
                 };
                 AjaxService.$inject = ['$http', 'UrlService'];
                 return AjaxService;

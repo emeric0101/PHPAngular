@@ -4,7 +4,7 @@ use Doctrine\ORM\Tools\Setup;
 use Doctrine\ORM\EntityManager;
 class DbService extends AService {
     private $entityManager = null;
-    private $log = new \Doctrine\DBAL\Logging\DebugStack();
+    private $log = null;
 
     public function getLog() {
         return $this->log;
