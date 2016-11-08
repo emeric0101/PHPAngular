@@ -4,6 +4,11 @@ use Doctrine\ORM\Tools\Setup;
 use Doctrine\ORM\EntityManager;
 class DbService extends AService {
     private $entityManager = null;
+    private $log = new \Doctrine\DBAL\Logging\DebugStack();
+
+    public function getLog() {
+        return $this->log;
+    }
 
     public function getEntityManager() {
         return $this->entityManager;
@@ -13,6 +18,7 @@ class DbService extends AService {
         $this->entityManager->getConnection()->close();
     }
     public function __construct() {
+        $this->log = new \Doctrine\DBAL\Logging\DebugStack();
         $isDevMode = true;
         $config = Setup::createAnnotationMetadataConfiguration(array("src/Entity",'vendor/Emeric0101/PHPAngular/src/Entity'), $isDevMode);
 
@@ -38,6 +44,9 @@ class DbService extends AService {
 
         // obtaining the entity manager
         $this->entityManager = EntityManager::create($conn, $config, $evm);
+
+        // Logging
+        $this->entityManager->getConfiguration()->setSQLLogger($this->log);
     }
 
 
