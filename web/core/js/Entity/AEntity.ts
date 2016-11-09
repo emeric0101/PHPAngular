@@ -35,7 +35,25 @@ module Emeric0101.PHPAngular.Entity {
         }
         protected setValue(name, value) {
             this.changed = true;
-            this[name] = value;
+            if (value instanceof Emeric0101.PHPAngular.Entity.Model) {
+                this[name] = {
+                    'entity': value.name,
+                    'id' : value.getId()
+                }
+            }
+            else if (typeof (value) == 'object' || typeof (value) == 'array') {
+                for (var i in value) {
+                    if (value[i] instanceof Emeric0101.PHPAngular.Entity.Model) {
+                        this[name][i] = {
+                            'entity': value[i].name,
+                            'id': value[i].getId()
+                        }
+                    }
+                }
+            }
+            else {
+                this[name] = value;
+            }
         }
 
 
@@ -141,6 +159,7 @@ module Emeric0101.PHPAngular.Entity {
                     }
                     request.setDone(true);
                 };
+
                 this.repositoryService.findById(value['entity'], value['id'], callbackSuccess, error);
                 return obj[field];
         };
@@ -169,8 +188,10 @@ module Emeric0101.PHPAngular.Entity {
                 this.setValues(obj);
             });
         }
-
-        constructor(private name: string, protected repositoryService) {
+        public setRepositoryService(repositoryService : Emeric0101.PHPAngular.Service.RepositoryService) {
+            this.repositoryService = repositoryService;
+        }
+        constructor(private name: string, protected repositoryService : Emeric0101.PHPAngular.Service.RepositoryService) {
         }
     }
 }

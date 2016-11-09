@@ -7,7 +7,9 @@ class RequestClass {
 	public function __construct(&$var) {
 		$this->variable = &$var;
 	}
-
+	public function count() {
+		return count($this->variable);
+	}
 	public function value($name, $default = '') {
 		if ($this->variable == null || ! array_key_exists($name, $this->variable)) {
 			return $default;
@@ -87,12 +89,15 @@ class Request extends AService
 		return $requestClass = new RequestClass($_SESSION);
 	}
 
+	// DEPRECATED : using requestclass instead
     public function postFromArray(string $arrayName, string $key, $default = "") {
         $post = $this->_getPost();
         if (!is_array($post[$arrayName]) || !array_key_exists($key, $post[$arrayName])) {
             return $default;
         }
-        return $this->_collapseType($post[$arrayName][$key], $default);
+		$requestClass = $this->postAsRequestClass();
+		$requestValues = $requestClass->value($arrayName, []);
+        return $requestValues->value($key, $default);
     }
 
     public function get(string $name, $default = "") {

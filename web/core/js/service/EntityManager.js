@@ -73,9 +73,12 @@ var Emeric0101;
                             continue;
                         }
                         if ((typeof (value) === 'array' || typeof (value) === 'object') && value.length > 0 && typeof (value[0].getId) === 'function') {
+                            var nvalue = [];
                             for (var objIndex in value) {
-                                value[objIndex] = value[objIndex].getId();
+                                nvalue[objIndex] = value[objIndex].getId();
                             }
+                            objs[i] = nvalue;
+                            continue;
                         }
                         if (typeof (value) === 'function') {
                             continue;
@@ -143,9 +146,9 @@ var Emeric0101;
                     };
                     $this.save(persistObjs[0], magicFunction);
                 };
-                EntityManager.$inject = ['AjaxService', 'UrlService', 'RepositoryService', '$injector'];
                 return EntityManager;
             }());
+            EntityManager.$inject = ['AjaxService', 'UrlService', 'RepositoryService', '$injector'];
             Service.EntityManager = EntityManager;
             phpangularModule.service("EntityManager", EntityManager);
         })(Service = PHPAngular.Service || (PHPAngular.Service = {}));

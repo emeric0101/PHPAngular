@@ -39,7 +39,25 @@ var Emeric0101;
                 };
                 Model.prototype.setValue = function (name, value) {
                     this.changed = true;
-                    this[name] = value;
+                    if (value instanceof Emeric0101.PHPAngular.Entity.Model) {
+                        this[name] = {
+                            'entity': value.name,
+                            'id': value.getId()
+                        };
+                    }
+                    else if (typeof (value) == 'object' || typeof (value) == 'array') {
+                        for (var i in value) {
+                            if (value[i] instanceof Emeric0101.PHPAngular.Entity.Model) {
+                                this[name][i] = {
+                                    'entity': value[i].name,
+                                    'id': value[i].getId()
+                                };
+                            }
+                        }
+                    }
+                    else {
+                        this[name] = value;
+                    }
                 };
                 Model.prototype.getIsFromDb = function () {
                     return this.isFromDb;
@@ -132,6 +150,9 @@ var Emeric0101;
                     this.repositoryService.findById(this.name, this.id, function (obj) {
                         _this.setValues(obj);
                     });
+                };
+                Model.prototype.setRepositoryService = function (repositoryService) {
+                    this.repositoryService = repositoryService;
                 };
                 return Model;
             }());

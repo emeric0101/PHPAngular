@@ -17,7 +17,7 @@ var Emeric0101;
                     if (action == '') {
                         action = module;
                     }
-                    this.$location.path(this.make(module, action, id));
+                    this.$location.url(this.make(module, action, id));
                 };
                 UrlService.prototype.make = function (module, action, id, params) {
                     if (action === void 0) { action = ""; }
@@ -71,9 +71,9 @@ var Emeric0101;
                     }
                     return url;
                 };
-                UrlService.$inject = ['$location', 'FlashmessageService'];
                 return UrlService;
             }());
+            UrlService.$inject = ['$location', 'FlashmessageService'];
             Service.UrlService = UrlService;
             phpangularModule.service("UrlService", UrlService);
         })(Service = PHPAngular.Service || (PHPAngular.Service = {}));

@@ -20,7 +20,7 @@ module Emeric0101.PHPAngular.Service {
             if (action == '') {
                 action = module;
             }
-            this.$location.path(this.make(module, action, id));
+            this.$location.url(this.make(module, action, id));
         }
         /**
         * make an url for page

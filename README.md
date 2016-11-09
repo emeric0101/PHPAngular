@@ -13,7 +13,7 @@
 - [x] Entity generator from server client side
 - [x] RepositoryService client side
 - [x] Custom method call by the repository service to get data from server
-- [ ] Post array recursivly for the request class on server
+- [x] Post array recursivly for the request class on server
 - [x] user loggin
 - [ ] Right management
 - [x] Possibility to combine find request from js to avoid multiple network call

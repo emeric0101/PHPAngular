@@ -24,9 +24,9 @@ var Emeric0101;
                 Request.prototype.getEntity = function () { return this.entity; };
                 Request.prototype.getCallback = function () { return this.callback; };
                 Request.prototype.getError = function () { return this.error; };
-                Request.globalrequestid = 1;
                 return Request;
             }());
+            Request.globalrequestid = 1;
             var RepositoryService = (function () {
                 function RepositoryService(AjaxService, UrlService, EntityFactory, $interval) {
                     this.AjaxService = AjaxService;
@@ -125,16 +125,19 @@ var Emeric0101;
                     this.addGetRequest(request);
                 };
                 RepositoryService.prototype.EntityFromJson = function (obj, name) {
-                    if (typeof (this.EntityFactory.getBundle().Entity[name]) !== "function") {
-                        throw 'EntityFromJson : unable to find entity : ' + name;
-                    }
-                    var entity = new (this.EntityFactory.getBundle()).Entity[name](this);
+                    var entity = this.createEntity(name);
                     entity.setValues(obj);
                     if (typeof (this.entities[name]) === "undefined") {
                         this.entities[name] = [];
                     }
                     this.entities[name][entity.getId()] = entity;
                     return entity;
+                };
+                RepositoryService.prototype.createEntity = function (name) {
+                    if (typeof (this.EntityFactory.getBundle().Entity[name]) !== "function") {
+                        throw 'EntityFromJson : unable to find entity : ' + name;
+                    }
+                    return new (this.EntityFactory.getBundle()).Entity[name](this);
                 };
                 RepositoryService.prototype.EntitiesFromJson = function (objs, name) {
                     var objArray = [];
@@ -175,9 +178,9 @@ var Emeric0101;
                     }, error);
                     this.addGetRequest(request);
                 };
-                RepositoryService.$inject = ['AjaxService', 'UrlService', 'EntityFactory', '$interval'];
                 return RepositoryService;
             }());
+            RepositoryService.$inject = ['AjaxService', 'UrlService', 'EntityFactory', '$interval'];
             Service.RepositoryService = RepositoryService;
             phpangularModule.service("RepositoryService", RepositoryService);
         })(Service = PHPAngular.Service || (PHPAngular.Service = {}));

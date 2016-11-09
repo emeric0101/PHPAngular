@@ -161,10 +161,7 @@ module Emeric0101.PHPAngular.Service {
         * @param name string name of the model
         */
         EntityFromJson(obj : {}, name : string) {
-            if (typeof(this.EntityFactory.getBundle().Entity[name]) !== "function") {
-                throw 'EntityFromJson : unable to find entity : ' + name;
-            }
-            var entity : Emeric0101.PHPAngular.Entity.Model = new (this.EntityFactory.getBundle()).Entity[name](this);
+            var entity : Emeric0101.PHPAngular.Entity.Model = this.createEntity(name);
             entity.setValues(obj);
             // Add to the local cache
             if (typeof(this.entities[name]) === "undefined") {
@@ -173,6 +170,13 @@ module Emeric0101.PHPAngular.Service {
             this.entities[name][entity.getId()] = entity;
 
             return entity;
+        }
+        /** best way to create an entity */
+        createEntity(name) {
+            if (typeof(this.EntityFactory.getBundle().Entity[name]) !== "function") {
+                throw 'EntityFromJson : unable to find entity : ' + name;
+            }
+            return new (this.EntityFactory.getBundle()).Entity[name](this);
         }
         /**
         * @param objs array
