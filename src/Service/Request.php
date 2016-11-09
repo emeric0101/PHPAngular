@@ -1,21 +1,21 @@
 <?php
 namespace Emeric0101\PHPAngular\Service;
-class Request extends AService
-{
-    const GET = 0;
-    const POST = 1;
-    const SESSION = 2;
 
-    /** Return the reference of $_POST
-    */
-    public function &_getPost() {
-        $global = &$_POST;
-        $json = file_get_contents('php://input');
-        if (empty($global) && !empty($json)) {
-            $global = (array)json_decode($json, true);
-        }
-        return $global;
-    }
+class RequestClass {
+    private $variable = null;
+
+	public function __construct(&$var) {
+		$this->variable = &$var;
+	}
+
+	public function value($name, $default = '') {
+		if ($this->variable == null || ! array_key_exists($name, $this->variable)) {
+			return $default;
+		}
+
+		return $this->_collapseType($this->variable[$name], $default);
+	}
+
     /**
     * Check type of src with default
     */
@@ -43,39 +43,49 @@ class Request extends AService
                     return boolval($src);
                 }
             break;
+			case 'object':
+				return new RequestClass($src);
+			break;
+			case 'array':
+				return new RequestClass($src);
+			break;
             default:
+
         }
 
         return $default;
     }
 
-    /**
-    * get
-    * @param string name
-    * @param mixed default Default variable to return if not exist (must be the same type than the requested var)
-    **/
-    private function _global(string $name, $default, $type)
-    {
-        switch ($type) {
-            case static::GET:
-                $global = &$_GET;
-                break;
-            case static::POST:
-                $global = &$this->_getPost();
-                break;
-            case static::SESSION:
-                $global = &$_SESSION;
-                break;
+}
 
-            default:
-                throw new \Exception("Unknown global type : " . $type);
-                break;
+class Request extends AService
+{
+    const GET = 0;
+    const POST = 1;
+    const SESSION = 2;
+
+    /** Return the reference of $_POST
+    */
+    public function &_getPost() {
+        $global = &$_POST;
+        $json = file_get_contents('php://input');
+        if (empty($global) && !empty($json)) {
+            $global = (array)json_decode($json, true);
         }
-        if (!isset($global[$name])) {
-            return $default;
-        }
-        return $this->_collapseType($global[$name], $default);
+        return $global;
     }
+
+
+
+	public function getAsRequestClass() {
+		return $requestClass = new RequestClass($_GET);
+	}
+	public function postAsRequestClass() {
+		return $requestClass = new RequestClass($this->_getPost());
+	}
+	public function sessionAsRequestClass() {
+		return $requestClass = new RequestClass($_SESSION);
+	}
 
     public function postFromArray(string $arrayName, string $key, $default = "") {
         $post = $this->_getPost();
@@ -86,15 +96,18 @@ class Request extends AService
     }
 
     public function get(string $name, $default = "") {
-        return $this->_global($name, $default, static::GET);
+        $requestClass = $this->getAsRequestClass();
+		return $requestClass->value($name, $default);
     }
 
     public function post(string $name, $default = "") {
-        return $this->_global($name, $default, static::POST);
-    }
+        $requestClass = $this->postAsRequestClass();
+		return $requestClass->value($name, $default);
+		}
 
     public function session(string $name, $default = "") {
-        return $this->_global($name, $default, static::SESSION);
+        $requestClass = $this->sessionAsRequestClass();
+		return $requestClass->value($name, $default);
     }
 
     /**
