@@ -63,7 +63,9 @@ class ControllerService extends AService{
         }
         // Logging
         if (PHPANGULAR_DEBUG) {
-            $this->response->setResponse('debug', $this->dbService->getLog());
+            $debug = $this->dbService->getLog();
+            $debug['end'] = microtime(true);
+            $this->response->setResponse('debug', $debug);
         }
     }
 
