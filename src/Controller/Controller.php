@@ -5,13 +5,24 @@ use Emeric0101\PHPAngular\Service\Response;
 use Emeric0101\PHPAngular\Service\Request;
 
 abstract class Controller {
-    protected $response = null;
-    protected $request = null;
-    protected $entityManager = null;
+    /**
+     * @Inject
+     * @var Response
+     */
+    protected $response;
+    /**
+     * @Inject
+     * @var DbService
+     */
+    protected $dbService;
+    /**
+     * @Inject
+     * @var Request
+     */
+    protected $request;
+
     /** We use this method to let user set their own constructor with injection */
-    public function setBaseService(Response $response, DbService $dbService, Request $request) {
-        $this->response = $response;
-        $this->entityManager = $dbService->getEntityManager();
-        $this->request = $request;
+    public function setBaseService() {
+        $this->entityManager = $this->dbService->getEntityManager();
     }
 }
