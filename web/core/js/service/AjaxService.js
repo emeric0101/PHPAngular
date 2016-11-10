@@ -4,6 +4,14 @@ var Emeric0101;
     (function (PHPAngular) {
         var Service;
         (function (Service) {
+            var DebugEntry = (function () {
+                function DebugEntry(nbRequest, time, queries) {
+                    this.nbRequest = nbRequest;
+                    this.time = time;
+                    this.queries = queries;
+                }
+                return DebugEntry;
+            }());
             var AjaxService = (function () {
                 function AjaxService($http, $url) {
                     this.$http = $http;
@@ -11,7 +19,7 @@ var Emeric0101;
                 }
                 AjaxService.prototype.callback = function (data, success) {
                     if (data.data.debug != undefined) {
-                        console.log(data.data.debug);
+                        console.info(new DebugEntry(data.data.debug.currentQuery, ((data.data.debug.end - data.data.debug.start) * 1000) + ' ms', data.data.debug.queries));
                     }
                     if (typeof (success) === 'function') {
                         success(data);
@@ -34,9 +42,9 @@ var Emeric0101;
                         method: "POST",
                     }).then(function (r) { return _this.callback(r, success); }, error);
                 };
-                AjaxService.$inject = ['$http', 'UrlService'];
                 return AjaxService;
             }());
+            AjaxService.$inject = ['$http', 'UrlService'];
             Service.AjaxService = AjaxService;
             phpangularModule.service("AjaxService", AjaxService);
         })(Service = PHPAngular.Service || (PHPAngular.Service = {}));

@@ -1,11 +1,11 @@
 <?php
-use phpunit\framework\TestCase;
+use Emeric0101\PHPAngular\Core\UnitTest;
 use Emeric0101\PHPAngular\Entity\EntityTestP;
 use Emeric0101\PHPAngular\Service\DbService;
 use Emeric0101\PHPAngular\Controller\Controller;
 use Emeric0101\PHPAngular\Service\Response;
 
-class EntityControllerTest extends TestCase
+class EntityControllerTest extends UnitTest
 {
 
     /**

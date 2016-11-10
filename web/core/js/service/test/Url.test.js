@@ -24,6 +24,8 @@ describe('UrlService', function () {
         spyOn(location, 'path');
         urlService.redirect('test','redirect', null, 'testmsg', 'class');
         expect(location.path).toHaveBeenCalledWith('test-redirect');
-        expect(flash.getBuffer()).toEqual([{msg: 'testmsg', type:'class'}]);
+        var flashmsg = flash.getBuffer();
+        expect(flashmsg[0].msg).toEqual('testmsg');
+        expect(flashmsg[0].type).toEqual('class');
     });
 });

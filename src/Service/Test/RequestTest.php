@@ -1,30 +1,14 @@
 <?php
-use phpunit\framework\TestCase;
+use Emeric0101\PHPAngular\Core\UnitTest;
 use Emeric0101\PHPAngular\Service\Request;
 
-class RequestTest extends TestCase
+class RequestTest extends UnitTest
 {
-    /**
-     * Call protected/private method of a class.
-     *
-     * @param object &$object    Instantiated object that we will run method on.
-     * @param string $methodName Method name to call
-     * @param array  $parameters Array of parameters to pass into method.
-     *
-     * @return mixed Method return.
-     */
-    public function invokeMethod(&$object, $methodName, array $parameters = array())
-    {
-        $reflection = new \ReflectionClass(get_class($object));
-        $method = $reflection->getMethod($methodName);
-        $method->setAccessible(true);
 
-        return $method->invokeArgs($object, $parameters);
-    }
 
     private $request = null;
     function setUp() {
-        $this->request = Request::getInstance();
+        $this->request = $this->get('Emeric0101\PHPAngular\Service\Request');
 
     }
 
@@ -41,7 +25,9 @@ class RequestTest extends TestCase
     public function testCollapseType($src, $default, $resultExpect) {
         $args = [$src, $default];
         $_POST = [];
-        $return = $this->invokeMethod($this->request,'_collapseType', $args);
+        $t = [];
+        $requestClass = new Emeric0101\PHPAngular\Service\RequestClass($t);
+        $return = $this->invokeMethod($requestClass,'_collapseType', $args);
         $this->assertEquals($return, $resultExpect);
     }
 
@@ -57,24 +43,6 @@ class RequestTest extends TestCase
         ];
     }
 
-    /**
-     * @dataProvider provider_global
-     */
-    public function test_global(string $name, $default, $type, $resultExpect) {
-        $args = [
-            $name, $default, $type
-        ];
-        $result = $this->invokeMethod($this->request, '_global', $args);
-        $this->assertEquals($resultExpect, $result);
-    }
-    /** Todo : POST test !! */
-    public function provider_global() {
-        $_GET['test'] = 'testget';
-
-        return [
-            ['test', '', Request::GET, 'testget']
-        ];
-    }
 
 
     /**
@@ -82,7 +50,7 @@ class RequestTest extends TestCase
      */
     public function testGet1($name, $default, $value)
     {
-        $a = Request::getInstance()->get($name, $default);
+        $a = $this->get('Emeric0101\PHPAngular\Service\Request')->get($name, $default);
         $this->assertEquals($a, $value);
     }
 

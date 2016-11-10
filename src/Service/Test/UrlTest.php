@@ -1,14 +1,19 @@
 <?php
-use phpunit\framework\TestCase;
+use Emeric0101\PHPAngular\Core\UnitTest;
 use Emeric0101\PHPAngular\Service\Url;
 
-class UrlTest extends TestCase
+class UrlTest extends UnitTest
 {
+    private $url;
+    public function setUp() {
+        $this->url = $this->get('Emeric0101\PHPAngular\Service\Url');
+    }
     /**
     * @dataProvider providerMake
     */
     public function testMake($module, $action, $id, $params, $result) {
-        $r= Url::getInstance()->make($module,$action,$id,$params);
+
+        $r= $this->url->make($module,$action,$id,$params);
         $this->assertEquals($r, $result);
     }
     public function providerMake() {
@@ -23,7 +28,7 @@ class UrlTest extends TestCase
     * @dataProvider providerMakeApi
     */
     public function testMakeApi($module, $action, $id, $params, $result) {
-        $r= Url::getInstance()->makeApi($module,$action,$id,$params);
+        $r= $this->url->makeApi($module,$action,$id,$params);
         $this->assertEquals($r, $result);
     }
     public function providerMakeApi() {

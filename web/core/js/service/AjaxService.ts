@@ -1,9 +1,12 @@
 module Emeric0101.PHPAngular.Service {
+    class DebugEntry {
+        public constructor(public nbRequest, public time, public queries) {}
+    }
     export class AjaxService {
         static $inject = ['$http', 'UrlService'];
         private callback(data: any, success : (data) => void) {
             if (data.data.debug != undefined) {
-                console.log(data.data.debug);
+                console.info(new DebugEntry(data.data.debug.currentQuery, ((data.data.debug.end - data.data.debug.start) * 1000) + ' ms', data.data.debug.queries));
             }
             if (typeof(success) === 'function') {
                 success(data);

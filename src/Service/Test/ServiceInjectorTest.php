@@ -1,5 +1,5 @@
 <?php
-use phpunit\framework\TestCase;
+use Emeric0101\PHPAngular\Core\UnitTest;
 use Emeric0101\PHPAngular\Controller\Controller;
 use Emeric0101\PHPAngular\Service\ServiceBlank;
 use DI\ContainerBuilder;
@@ -14,7 +14,7 @@ class InjectorClass {
     }
 }
 
-class ServiceInjectorTest extends TestCase
+class ServiceInjectorTest extends UnitTest
 {
     public function testServiceInjector()
     {
