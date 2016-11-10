@@ -12,6 +12,12 @@ class Multiple extends Controller {
 		$this->request = $request;
 		$this->response = $response;
 	}
+
+	private function prepareGetRequest($request) {
+		$_GET['method'] = $request['method'];
+		foreach ($request['params'] as $t => $p) { $_GET[$t] = $p;}
+	}
+
 	/**
 	* Dispatch all request
 	*/
@@ -19,8 +25,7 @@ class Multiple extends Controller {
 		$post = $this->request->_getPost();
 		$buffers = [];
 		foreach ($post as $request) {
-			$_GET['method'] = $request['method'];
-			foreach ($request['params'] as $t => $p) { $_GET[$t] = $p;}
+			$this->prepareGetRequest($request);
 			$this->controllerService->callController($request['controller'], $request['method'], $request['id'], $request['params']);
 			$buffer = $this->response->getBuffer();
 			$buffer['requestid'] = $request['requestid']; // unique id

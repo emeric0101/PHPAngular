@@ -14,8 +14,8 @@ class Bootstraper {
         $container = $containerBuilder->build();
 
         $db = $container->get('Emeric0101\PHPAngular\Service\DbService');
-
-        $controllerService = new ControllerService($container);
+        $controllerService = $container->get('Emeric0101\PHPAngular\Service\ControllerService');
+        $controllerService->setContainer($container);
         $controllerService->callController();
         $controllerService->render();
 

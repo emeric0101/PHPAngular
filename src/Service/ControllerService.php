@@ -1,17 +1,19 @@
 <?php
 namespace Emeric0101\PHPAngular\Service;
+use Emeric0101\PHPAngular\Service\{Request, Response, DbService};
+
 class ControllerService extends AService{
     private $container = null;
     private $request = null;
     private $response = null;
     private $dbService = null;
-    public function __construct($container) {
+    public function __construct(Request $r, Response $rp, DbService $d) {
+        $this->request = $r;
+        $this->response = $rp;
+        $this->dbService = $d;
+    }
+    public function setContainer($container) {
         $this->container = $container;
-		$container->set('Emeric0101\PHPAngular\Service\ControllerService', $this);
-        $this->request = $container->get('Emeric0101\PHPAngular\Service\Request');
-        $this->response = $container->get('Emeric0101\PHPAngular\Service\Response');
-        $this->dbService = $container->get('Emeric0101\PHPAngular\Service\DbService');
-
     }
 
     public function getControllerName($controllerGet) {
