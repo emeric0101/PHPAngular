@@ -22,5 +22,6 @@ final class Config {
     ];
     static $ResolveTargetEntities = [
     ];
+    static $cache = 'FILE';
 
 }

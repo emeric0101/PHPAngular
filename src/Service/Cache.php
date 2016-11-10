@@ -1,7 +1,70 @@
 <?php
 namespace Emeric0101\PHPAngular\Service;
 use Leafo\ScssPhp\Compiler;
+class CacheException extends \Exception {
+
+}
 class Cache extends AService {
+    private $cacheDriver = null;
+    public function getCacheDriver () {
+        return $this->cacheDriver;
+    }
+    public function __construct() {
+        switch (\Emeric0101\PHPAngular\Config::$cache)
+        {
+            case 'APCU':
+                $this->cacheDriver = new \Doctrine\Common\Cache\ApcuCache();
+            break;
+            case 'FILE':
+                $this->cacheDriver = new \Doctrine\Common\Cache\FilesystemCache(APP_DIR . 'cache');
+            break;
+            case 'MEMCACHE':
+                $this->cacheDriver = new \Doctrine\Common\Cache\MemcacheCache();
+                $memcache = new \Memcache();
+                $memcache->connect(\Emeric0101\PHPAngular\Config::$cacheHost, \Emeric0101\PHPAngular\Config::$cachePort);
+                $this->cacheDriver->setMemcache($memcache);
+            break;
+            case 'MEMCACHED':
+                $this->cacheDriver = new \Doctrine\Common\Cache\MemcachedCache();
+                $memcached = new \Memcached();
+                $memcached->connect(\Emeric0101\PHPAngular\Config::$cacheHost, \Emeric0101\PHPAngular\Config::$cachePort);
+                $this->cacheDriver->setMemcache($memcached);
+            break;
+            case 'REDIS':
+                $this->cacheDriver = new \Doctrine\Common\Cache\RedisCache();
+            break;
+            default:
+                $this->cacheDriver = new \Doctrine\Common\Cache\ArrayCache();
+        }
+    }
+    /** fetch value from the cache
+    * @param $key string
+    * return null if not exist
+     */
+    public function fetch($key) {
+        if ($this->cacheDriver->contains($key)) {return null;}
+        return $this->cacheDriver->fetch($key);
+    }
+    /**
+    * save an item into the cacheDriver
+    * @param $key
+    * @param $value
+    * @param $lifetome (25200s)
+    */
+    public function save($key, $value, $lifetime = 25200) {
+        $ret = $this->cacheDriver->save($key, $value);
+        if (!$ret) {
+            throw new CacheException("Unable to save : " . $key);
+        }
+        return true;
+    }
+    /** delete value from the cache
+    * @param $key string
+    * return null if not exist
+     */
+    public function delete($key) {
+        $this->cacheDriver->delete($key);
+    }
 
     /**
 	 * Parse les dossiers à la recherche de fichier d'extension précisé et renvoi un tableau de ces fichiers

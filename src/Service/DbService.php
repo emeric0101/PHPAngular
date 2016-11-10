@@ -2,6 +2,7 @@
 namespace Emeric0101\PHPAngular\Service;
 use Doctrine\ORM\Tools\Setup;
 use Doctrine\ORM\EntityManager;
+use Emeric0101\PHPAngular\Service\Cache as CacheService;
 class DbService extends AService {
     private $entityManager = null;
     private $log = null;
@@ -17,11 +18,14 @@ class DbService extends AService {
     public function close() {
         $this->entityManager->getConnection()->close();
     }
-    public function __construct() {
+    public function __construct(CacheService $cache) {
         $this->log = new \Doctrine\DBAL\Logging\DebugStack();
         $isDevMode = true;
         $config = Setup::createAnnotationMetadataConfiguration(array("src/Entity",'vendor/Emeric0101/PHPAngular/src/Entity'), $isDevMode);
-
+        // Cache
+        $config->setQueryCacheImpl($cache->getCacheDriver());
+        $config->setResultCacheImpl($cache->getCacheDriver());
+        $config->setMetadataCacheImpl($cache->getCacheDriver());
         // database configuration parameters
         $conn = array(
             'driver'   => 'pdo_mysql',
