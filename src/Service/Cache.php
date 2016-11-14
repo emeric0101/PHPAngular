@@ -42,7 +42,7 @@ class Cache extends AService {
     * return null if not exist
      */
     public function fetch($key) {
-        if ($this->cacheDriver->contains($key)) {return null;}
+        if (!$this->cacheDriver->contains($key)) {return null;}
         return $this->cacheDriver->fetch($key);
     }
     /**
