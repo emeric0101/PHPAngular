@@ -25,7 +25,7 @@ class DbService extends AService {
         // Cache
         $config->setQueryCacheImpl($cache->getCacheDriver());
         $config->setResultCacheImpl($cache->getCacheDriver());
-        $config->setMetadataCacheImpl($cache->getCacheDriver());
+        //$config->setMetadataCacheImpl($cache->getCacheDriver()); bug with IUser
         // database configuration parameters
         $conn = array(
             'driver'   => 'pdo_mysql',
