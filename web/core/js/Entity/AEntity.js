@@ -39,25 +39,7 @@ var Emeric0101;
                 };
                 Model.prototype.setValue = function (name, value) {
                     this.changed = true;
-                    if (value instanceof Emeric0101.PHPAngular.Entity.Model) {
-                        this[name] = {
-                            'entity': value.name,
-                            'id': value.getId()
-                        };
-                    }
-                    else if (typeof (value) == 'object' || typeof (value) == 'array') {
-                        for (var i in value) {
-                            if (value[i] instanceof Emeric0101.PHPAngular.Entity.Model) {
-                                this[name][i] = {
-                                    'entity': value[i].name,
-                                    'id': value[i].getId()
-                                };
-                            }
-                        }
-                    }
-                    else {
-                        this[name] = value;
-                    }
+                    this[name] = value;
                 };
                 Model.prototype.getIsFromDb = function () {
                     return this.isFromDb;
@@ -135,7 +117,8 @@ var Emeric0101;
                         var value = values[i];
                         if (value !== null && typeof (value["class"]) === 'string') {
                             if (value["class"] === 'datetime') {
-                                value = new Date(value['date']);
+                                var s = value['date'].split(/\D/);
+                                value = new Date(Date.UTC(s[0], --s[1] || '', s[2] || '', s[3] || '', s[4] || '', s[5] || '', s[6] || ''));
                             }
                             else {
                                 throw "Unable to serialize : " + value['class'];

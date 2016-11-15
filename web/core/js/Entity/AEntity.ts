@@ -35,25 +35,7 @@ module Emeric0101.PHPAngular.Entity {
         }
         protected setValue(name, value) {
             this.changed = true;
-            if (value instanceof Emeric0101.PHPAngular.Entity.Model) {
-                this[name] = {
-                    'entity': value.name,
-                    'id' : value.getId()
-                }
-            }
-            else if (typeof (value) == 'object' || typeof (value) == 'array') {
-                for (var i in value) {
-                    if (value[i] instanceof Emeric0101.PHPAngular.Entity.Model) {
-                        this[name][i] = {
-                            'entity': value[i].name,
-                            'id': value[i].getId()
-                        }
-                    }
-                }
-            }
-            else {
-                this[name] = value;
-            }
+            this[name] = value;
         }
 
 
@@ -82,7 +64,6 @@ module Emeric0101.PHPAngular.Entity {
             if (array.length == 0) {
                 return [];
             }
-
 
             for (var i in this[field]) {
                 this.foreignKey(i, null, null, this[field]);
@@ -171,7 +152,9 @@ module Emeric0101.PHPAngular.Entity {
                 if (value !== null && typeof (value["class"]) === 'string') {
                     if (value["class"] === 'datetime') {
                         // datetime
-                        value = new Date(value['date']);
+                        // ie doesn't support direct ISO date in constructor
+                        let s = value['date'].split(/\D/);
+                        value = new Date(Date.UTC(s[0], --s[1]||'', s[2]||'', s[3]||'', s[4]||'', s[5]||'', s[6]||''));
                     }
                     else {
                         throw "Unable to serialize : " + value['class'];
