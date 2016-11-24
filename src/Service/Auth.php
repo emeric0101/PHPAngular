@@ -63,6 +63,10 @@ class Auth extends AService {
         return $table;
     }
 
+    public function getTable() {
+        return $this->table;
+    }
+
     public function getRight($rightName, $user = null) {
         if ($user == null) {
             $user = $this->login->getUserFromPHPSession();

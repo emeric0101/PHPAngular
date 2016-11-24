@@ -1,5 +1,5 @@
 <?php
-use Emeric0101\PHPAngular\Core\UnitTest;
+use Emeric0101\PHPAngular\Test\UnitTest;
 use Emeric0101\PHPAngular\Controller\Controller;
 use Emeric0101\PHPAngular\Service\ServiceController;
 

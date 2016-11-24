@@ -9,9 +9,12 @@ abstract class Controller {
     protected $request = null;
     protected $entityManager = null;
     /** We use this method to let user set their own constructor with injection */
-    public function setBaseService(Response $response, DbService $dbService, Request $request) {
+    public function setBaseService( $response,  $dbService,  $request) {
         $this->response = $response;
-        $this->entityManager = $dbService->getEntityManager();
+        if ($dbService != null) { // unit testintg
+            $this->entityManager = $dbService->getEntityManager();
+
+        }
         $this->request = $request;
     }
 }

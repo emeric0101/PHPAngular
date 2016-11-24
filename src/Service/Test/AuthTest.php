@@ -1,60 +1,10 @@
 <?php
-use Emeric0101\PHPAngular\Core\UnitTest;
+use Emeric0101\PHPAngular\Test\UnitTest;
 use Emeric0101\PHPAngular\Service\Auth;
-use Emeric0101\PHPAngular\Service\ILogin;
-use Emeric0101\PHPAngular\Entity\{IUser ,IGroup};
-
-class GroupTest implements IGroup {
-    private $flag;
-    public function getFlag() {
-        return $this->flag;
-    }
-    public function __construct($flag) {
-        $this->flag = $flag;
-    }
-}
-
-class UserTest implements IUser {
-    public function setMail($mail) {}
-    public function getMail() {}
-
-        private $groupe;
-    public function getPassword() {}
-    public function setHashedPassword(string $p) {}
-        public function __construct($flag) {
-            $this->groupe = new GroupTest($flag);
-        }
-    /**
-    @return IGroupe
-    **/
-    public function getGroupe() {
-
-        return $this->groupe;
-    }
-}
+use Emeric0101\PHPAngular\Test\LoginTest;
+use Emeric0101\PHPAngular\Test\UserTest;
 
 
-class LoginTest implements ILogin {
-    public function getUserFromPHPSession() {
-        $user = new UserTest('USER');
-        return $user;
-    }
-    public function getUserFromSession($sid) {
-
-    }
-    public function logout() {
-
-    }
-    public function hashPassword($p) {
-
-    }
-    public function login($mail, $password, $stayConnected) {
-
-    }
-    public function loginWithUser($user){
-
-    }
-}
 class AuthTest extends UnitTest
 {
     function setUp() {
