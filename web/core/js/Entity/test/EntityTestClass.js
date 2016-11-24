@@ -12,8 +12,9 @@ var Emeric0101;
             var EntityTest = (function (_super) {
                 __extends(EntityTest, _super);
                 function EntityTest(repositoryService) {
-                    _super.call(this, "EntityTest", repositoryService);
-                    this.title = "";
+                    var _this = _super.call(this, "EntityTest", repositoryService) || this;
+                    _this.title = "";
+                    return _this;
                 }
                 EntityTest.prototype.getTitle = function () {
                     return this.title;

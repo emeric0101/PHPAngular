@@ -1,6 +1,5 @@
 
 module Emeric0101.PHPAngular.Entity {
-
     class ForeignKeyRequest {
         private callbacks : ((model : Model) => void)[] = [];
         private done = false;

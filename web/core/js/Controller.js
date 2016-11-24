@@ -7,9 +7,9 @@ var Emeric0101;
             var Controller = (function () {
                 function Controller() {
                 }
-                Controller.$inject = [];
                 return Controller;
             }());
+            Controller.$inject = [];
             Controller_1.Controller = Controller;
         })(Controller = PHPAngular.Controller || (PHPAngular.Controller = {}));
     })(PHPAngular = Emeric0101.PHPAngular || (Emeric0101.PHPAngular = {}));

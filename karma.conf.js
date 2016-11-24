@@ -18,11 +18,12 @@ module.exports = function(config) {
       'web/bower_components/angular/angular.js',
       'web/bower_components/angular-route/angular-route.js',
       'web/lib/angular-locale_fr-fr.js',
-      'web/bower_components/bootstrap/dist/js/bootstrap.js',
       'web/bower_components/angular-mocks/angular-mocks.js',
+      'web/core/js/Entity/*.js',
       'web/core/js/*.js',
-      'web/core/**/*.js',
-      'web/template/**/*.js'
+      'web/core/js/test.js', // for fake factory service
+      'web/core/js/**/*.js',
+      'web/template/**/*.js',
     ],
 
 

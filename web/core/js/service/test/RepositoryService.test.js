@@ -16,7 +16,7 @@ describe('RepositoryService', function () {
     it('findAll user', inject(function($httpBackend, RepositoryService, $interval) {
            var $scope = {};
 
-           /* Code Under Test */
+
            RepositoryService.findAll('User', function(user) {
                $scope.user = user;
            })
@@ -60,7 +60,7 @@ describe('RepositoryService', function () {
     it('findById', inject(function($httpBackend, RepositoryService, $interval) {
            var $scope = {};
 
-           /* Code Under Test */
+
            RepositoryService.findById('User',1, function(User) {
                $scope.User = User;
                $scope.valid = true;
