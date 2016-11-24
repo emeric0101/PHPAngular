@@ -5,8 +5,9 @@ use Emeric0101\PHPAngular\Service\Request;
 use Emeric0101\PHPAngular\Service\Singleton;
 use AFE\DmoBundle\Entity\Variable;
 use Emeric0101\PHPAngular\Service\AService;
+use Emeric0101\PHPAngular\Service\ILogin;
 
-class Login extends AService {
+class Login extends AService implements ILogin {
     protected $user = null;
     protected $entityManager = null;
 

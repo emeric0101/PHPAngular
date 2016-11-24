@@ -14,6 +14,7 @@ abstract class UnitTest extends TestCase
     public function get($key) {
         if ($this->container == null) {
             $containerBuilder = new ContainerBuilder;
+            $containerBuilder->addDefinitions('src/core/config-di.php');
             $this->container = $containerBuilder->build();
         }
 

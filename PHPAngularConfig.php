@@ -22,6 +22,11 @@ final class Config {
     ];
     static $ResolveTargetEntities = [
     ];
+    // flag => rights
+    static $rights = [
+        'MODERATOR' => ['user-edit', ['USER']],
+        'USER' => ['user-edit-itself']
+    ];
     static $cache = 'FILE';
 
 }

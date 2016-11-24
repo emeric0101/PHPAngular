@@ -11,4 +11,9 @@ interface IUser
 
     public function getPassword();
     public function setHashedPassword(string $p);
+
+    /**
+    @return IGroupe
+    **/
+    public function getGroupe();
 }
