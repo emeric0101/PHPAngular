@@ -27,6 +27,11 @@ var Emeric0101;
                             return;
                         }
                         $this.isLogged(function (user) {
+                            if (user == null) {
+                                alert("Une erreur s'est produite, veuillez vous connecter à nouveau");
+                                console.error("LoginService::login : the user return by isLogged is null..., what the server is doing ?!!");
+                                return;
+                            }
                             success(user);
                         }, true);
                     }, function () {

@@ -17,13 +17,11 @@ module.exports = function(config) {
     files: [
       'web/bower_components/angular/angular.js',
       'web/bower_components/angular-route/angular-route.js',
-      'web/bower_components/angular-file-upload/dist/angular-file-upload.js',
       'web/lib/angular-locale_fr-fr.js',
-      'web/bower_components/jquery/dist/jquery.js',
       'web/bower_components/bootstrap/dist/js/bootstrap.js',
       'web/bower_components/angular-mocks/angular-mocks.js',
-      'web/js/*.js',
-      'web/js/**/*.js',
+      'web/core/js/*.js',
+      'web/core/**/*.js',
       'web/template/**/*.js'
     ],
 

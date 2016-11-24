@@ -3,7 +3,7 @@ module Emeric0101.PHPAngular.Service {
         static $inject = ['AjaxService', 'UrlService', 'RepositoryService', '$injector'];
         private persistObjs : any[] = [];
 
-        constructor(private $ajax, private $url, private $repo, private $injector) {}
+        constructor(private $ajax, private $url, private $repo : Emeric0101.PHPAngular.Service.RepositoryService, private $injector) {}
 
         public getRespository(name : string) {
             // looking for the repository class if existence
@@ -70,6 +70,10 @@ module Emeric0101.PHPAngular.Service {
             }
             for (var i in obj) {
                 var value = obj[i];
+
+                if (i == 'foreignKeyRequests') {continue;}
+                if (value instanceof Emeric0101.PHPAngular.Service.RepositoryService) {continue;}
+                if (typeof(value) === 'function') {continue;}
                 // Excludes :
                 if (value === null || typeof(value) === 'undefined') {
                     continue;
@@ -84,8 +88,7 @@ module Emeric0101.PHPAngular.Service {
                     objs[i] = nvalue;
                     continue;
                 }
-                if (typeof(value) === 'function') {continue;}
-                if (value instanceof Emeric0101.PHPAngular.Service.RepositoryService) {continue;}
+
                 // Entity (instanceof ne marche pas toujours)
                 if (typeof(value.getId) === 'function') {
                     value = value.getId();
@@ -132,8 +135,6 @@ module Emeric0101.PHPAngular.Service {
         * @param autoclear Avoid autoclear of persisted entities
         */
         public flush(callback? : (result, errorMsg) => void, autoclear = true) {
-            var $this = this;
-            $this.$repo.clearCache();
             if (typeof (callback) === "undefined") {
                 callback = function(r) {};
             }
@@ -142,7 +143,7 @@ module Emeric0101.PHPAngular.Service {
             var persistObjs = this.persistObjs;
             // Clear all persist obj
             if (autoclear) {
-                $this.clear();
+                this.clear();
             }
 
             var i = 0;
@@ -154,13 +155,14 @@ module Emeric0101.PHPAngular.Service {
                 }
                 i++;
                 if (i>=persistObjs.length) { // break condition
+                    this.$repo.clearCache();
                     callback(true, errorMsg);
                     return;
                 }
                 this.save(persistObjs[i], magicFunction)
             };
             // Init recurrence
-            $this.save(persistObjs[0], magicFunction)
+            this.save(persistObjs[0], magicFunction)
 
         }
     }

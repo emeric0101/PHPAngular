@@ -69,6 +69,15 @@ var Emeric0101;
                     }
                     for (var i in obj) {
                         var value = obj[i];
+                        if (i == 'foreignKeyRequests') {
+                            continue;
+                        }
+                        if (value instanceof Emeric0101.PHPAngular.Service.RepositoryService) {
+                            continue;
+                        }
+                        if (typeof (value) === 'function') {
+                            continue;
+                        }
                         if (value === null || typeof (value) === 'undefined') {
                             continue;
                         }
@@ -78,12 +87,6 @@ var Emeric0101;
                                 nvalue[objIndex] = value[objIndex].getId();
                             }
                             objs[i] = nvalue;
-                            continue;
-                        }
-                        if (typeof (value) === 'function') {
-                            continue;
-                        }
-                        if (value instanceof Emeric0101.PHPAngular.Service.RepositoryService) {
                             continue;
                         }
                         if (typeof (value.getId) === 'function') {
@@ -119,8 +122,6 @@ var Emeric0101;
                 EntityManager.prototype.flush = function (callback, autoclear) {
                     var _this = this;
                     if (autoclear === void 0) { autoclear = true; }
-                    var $this = this;
-                    $this.$repo.clearCache();
                     if (typeof (callback) === "undefined") {
                         callback = function (r) { };
                     }
@@ -129,7 +130,7 @@ var Emeric0101;
                     }
                     var persistObjs = this.persistObjs;
                     if (autoclear) {
-                        $this.clear();
+                        this.clear();
                     }
                     var i = 0;
                     var magicFunction = function (response, errorMsg) {
@@ -139,12 +140,13 @@ var Emeric0101;
                         }
                         i++;
                         if (i >= persistObjs.length) {
+                            _this.$repo.clearCache();
                             callback(true, errorMsg);
                             return;
                         }
                         _this.save(persistObjs[i], magicFunction);
                     };
-                    $this.save(persistObjs[0], magicFunction);
+                    this.save(persistObjs[0], magicFunction);
                 };
                 return EntityManager;
             }());

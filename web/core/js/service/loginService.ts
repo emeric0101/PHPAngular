@@ -5,7 +5,7 @@ module Emeric0101.PHPAngular.Service {
         protected logged = false; // if the request has already been sent
         protected requesting = false;
         protected waitingCb : ((user : Emeric0101.PHPAngular.Entity.IUser) => void)[] = [];
-        
+
         login(
             mail : string,
             pass : string,
@@ -24,6 +24,11 @@ module Emeric0101.PHPAngular.Service {
                     return;
                 }
                 $this.isLogged(function(user) {
+                    if (user == null) {
+                        alert("Une erreur s'est produite, veuillez vous connecter à nouveau");
+                        console.error("LoginService::login : the user return by isLogged is null..., what the server is doing ?!!");
+                        return;
+                    }
                     success(user);
                 }, true);
             },

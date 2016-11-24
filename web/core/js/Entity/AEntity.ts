@@ -4,19 +4,46 @@ module Emeric0101.PHPAngular.Entity {
     class ForeignKeyRequest {
         private callbacks : ((model : Model) => void)[] = [];
         private done = false;
-        public getDone() {return this.done;}
-        public setDone(s) {
-            this.done = s;
+
+        private value = null;
+        public static getForeignKeyRequestFromField(field :string, array : ForeignKeyRequest[]) {
+            for (let request of array) {
+                if (request == null) {continue;}
+                if (request.getField() == field) {
+                    return request;
+                }
+            }
         }
+        /**
+        * Add a callback to the stack if the request is not done
+        */
         public addCallback(cb : (model : Model) => void) {
-            this.callbacks.push(cb);
+            if (this.done) {
+                cb(this.value);
+            }
+            else {
+                this.callbacks.push(cb);
+            }
         }
         public getField() {
             return this.field;
         }
-        public getCallbacks() {
-            return this.callbacks;
+        /**
+        * Function call when the ajax get the value
+        */
+        public valueReceived(value) {
+            this.value = value;
+            this.done = true;
+            this.fireCallback();
         }
+
+        private fireCallback() {
+            for (let cb of this.callbacks) {
+                cb(this.value);
+            }
+            this.callbacks = []; // clear callbacks
+        }
+
         public constructor(
             callback : ((model : Model) => void),
             private field : string
@@ -36,6 +63,11 @@ module Emeric0101.PHPAngular.Entity {
         protected setValue(name, value) {
             this.changed = true;
             this[name] = value;
+            for (var i in this.foreignKeyRequests) {
+                if (this.foreignKeyRequests[i] != null && this.foreignKeyRequests[i].getField() == name) {
+                    this.foreignKeyRequests[i] = null; // unset
+                }
+            }
         }
 
 
@@ -106,18 +138,16 @@ module Emeric0101.PHPAngular.Entity {
                 if (value === null) {
                     return null;
                 }
+
+
                 // If the key is already requested (or requested)
-                for (let request of this.foreignKeyRequests) {
-                    if (request.getField() == field) {
-                        if (request.getDone()) {
-                            success(obj[field]);
-                        }
-                        else {
-                            request.addCallback(success);
-                        }
-                        return obj[field];;
-                    }
+                let requestExist = ForeignKeyRequest.getForeignKeyRequestFromField(field, this.foreignKeyRequests);
+                if (requestExist != null) {
+                    requestExist.addCallback(success); // add callback
+
+                    return obj[field];
                 }
+
                 // if already exist
                 if ((obj[field] instanceof Model)) {
                     return obj[field];
@@ -132,13 +162,10 @@ module Emeric0101.PHPAngular.Entity {
                 if (typeof(value['entity']) === 'undefined') {
                     throw 'Model : foreignKey not an entity !';
                 }
-                var callbackSuccess = function(objReceived) {
+                var callbackSuccess = (objReceived) =>{
                     obj[field] = objReceived;
                     // clear callback
-                    for (let success of request.getCallbacks()) {
-                        success(objReceived);
-                    }
-                    request.setDone(true);
+                    request.valueReceived(objReceived);
                 };
 
                 this.repositoryService.findById(value['entity'], value['id'], callbackSuccess, error);
@@ -154,7 +181,7 @@ module Emeric0101.PHPAngular.Entity {
                         // datetime
                         // ie doesn't support direct ISO date in constructor
                         let s = value['date'].split(/\D/);
-                        value = new Date(Date.UTC(s[0], --s[1]||'', s[2]||'', s[3]||'', s[4]||'', s[5]||'', s[6]||''));
+                        value = new Date(Date.UTC(s[0], --s[1]||0, s[2]||'', s[3]||'', s[4]||'', s[5]||'', s[6]||''));
                     }
                     else {
                         throw "Unable to serialize : " + value['class'];

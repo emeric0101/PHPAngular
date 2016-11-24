@@ -9,20 +9,42 @@ var Emeric0101;
                     this.field = field;
                     this.callbacks = [];
                     this.done = false;
+                    this.value = null;
                     this.callbacks.push(callback);
                 }
-                ForeignKeyRequest.prototype.getDone = function () { return this.done; };
-                ForeignKeyRequest.prototype.setDone = function (s) {
-                    this.done = s;
+                ForeignKeyRequest.getForeignKeyRequestFromField = function (field, array) {
+                    for (var _i = 0, array_1 = array; _i < array_1.length; _i++) {
+                        var request = array_1[_i];
+                        if (request == null) {
+                            continue;
+                        }
+                        if (request.getField() == field) {
+                            return request;
+                        }
+                    }
                 };
                 ForeignKeyRequest.prototype.addCallback = function (cb) {
-                    this.callbacks.push(cb);
+                    if (this.done) {
+                        cb(this.value);
+                    }
+                    else {
+                        this.callbacks.push(cb);
+                    }
                 };
                 ForeignKeyRequest.prototype.getField = function () {
                     return this.field;
                 };
-                ForeignKeyRequest.prototype.getCallbacks = function () {
-                    return this.callbacks;
+                ForeignKeyRequest.prototype.valueReceived = function (value) {
+                    this.value = value;
+                    this.done = true;
+                    this.fireCallback();
+                };
+                ForeignKeyRequest.prototype.fireCallback = function () {
+                    for (var _i = 0, _a = this.callbacks; _i < _a.length; _i++) {
+                        var cb = _a[_i];
+                        cb(this.value);
+                    }
+                    this.callbacks = [];
                 };
                 return ForeignKeyRequest;
             }());
@@ -40,6 +62,11 @@ var Emeric0101;
                 Model.prototype.setValue = function (name, value) {
                     this.changed = true;
                     this[name] = value;
+                    for (var i in this.foreignKeyRequests) {
+                        if (this.foreignKeyRequests[i] != null && this.foreignKeyRequests[i].getField() == name) {
+                            this.foreignKeyRequests[i] = null;
+                        }
+                    }
                 };
                 Model.prototype.getIsFromDb = function () {
                     return this.isFromDb;
@@ -79,18 +106,10 @@ var Emeric0101;
                     if (value === null) {
                         return null;
                     }
-                    for (var _i = 0, _a = this.foreignKeyRequests; _i < _a.length; _i++) {
-                        var request_1 = _a[_i];
-                        if (request_1.getField() == field) {
-                            if (request_1.getDone()) {
-                                success(obj[field]);
-                            }
-                            else {
-                                request_1.addCallback(success);
-                            }
-                            return obj[field];
-                            ;
-                        }
+                    var requestExist = ForeignKeyRequest.getForeignKeyRequestFromField(field, this.foreignKeyRequests);
+                    if (requestExist != null) {
+                        requestExist.addCallback(success);
+                        return obj[field];
                     }
                     if ((obj[field] instanceof Model)) {
                         return obj[field];
@@ -102,11 +121,7 @@ var Emeric0101;
                     }
                     var callbackSuccess = function (objReceived) {
                         obj[field] = objReceived;
-                        for (var _i = 0, _a = request.getCallbacks(); _i < _a.length; _i++) {
-                            var success_1 = _a[_i];
-                            success_1(objReceived);
-                        }
-                        request.setDone(true);
+                        request.valueReceived(objReceived);
                     };
                     this.repositoryService.findById(value['entity'], value['id'], callbackSuccess, error);
                     return obj[field];
@@ -118,7 +133,7 @@ var Emeric0101;
                         if (value !== null && typeof (value["class"]) === 'string') {
                             if (value["class"] === 'datetime') {
                                 var s = value['date'].split(/\D/);
-                                value = new Date(Date.UTC(s[0], --s[1] || '', s[2] || '', s[3] || '', s[4] || '', s[5] || '', s[6] || ''));
+                                value = new Date(Date.UTC(s[0], --s[1] || 0, s[2] || '', s[3] || '', s[4] || '', s[5] || '', s[6] || ''));
                             }
                             else {
                                 throw "Unable to serialize : " + value['class'];
