@@ -1,5 +1,6 @@
 
 module Emeric0101.PHPAngular.Entity {
+
     class ForeignKeyRequest {
         private callbacks : ((model : Model) => void)[] = [];
         private done = false;
@@ -180,7 +181,9 @@ module Emeric0101.PHPAngular.Entity {
                         // datetime
                         // ie doesn't support direct ISO date in constructor
                         let s = value['date'].split(/\D/);
-                        value = new Date(Date.UTC(s[0], --s[1]||0, s[2]||'', s[3]||'', s[4]||'', s[5]||'', s[6]||''));
+                        let d = new Date();
+                        d.setFullYear(s[0]); d.setMonth(s[1]-1); d.setDate(s[2]); d.setHours(s[3]); d.setMinutes(s[4]);
+                        value = d;
                     }
                     else {
                         throw "Unable to serialize : " + value['class'];

@@ -4,5 +4,6 @@ module Emeric0101.PHPAngular.Entity {
         getMail();
 
         setMail(m : string);
+        getGroupe(cb? : (groupes : IGroup[]) => void) : Emeric0101.PHPAngular.Entity.IGroup[];
     }
 }

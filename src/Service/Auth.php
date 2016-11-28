@@ -4,12 +4,12 @@ namespace Emeric0101\PHPAngular\Service;
 use Emeric0101\PHPAngular\Service\Login as LoginService;
 
 
-abstract class IRight {
+abstract class IRight{
     protected $flag;
     public function getFlag() {return $this->flag;}
     abstract public function getRight($rightName);
 }
-class RightGroup extends IRight {
+class RightGroup extends IRight  implements \JsonSerializable  {
     private $rights = [];
     public function addRight(IRight $right) {
         $this->rights[] = $right;
@@ -21,6 +21,19 @@ class RightGroup extends IRight {
             }
         }
         return false;
+    }
+    public function jsonSerialize() {
+        $array = [];
+        foreach ($this->rights as $right) {
+            if ($right instanceof RightGroup) {
+                $array[$right->getFlag()] = 'P';
+            }
+            else {
+                $array[$right->getFlag()] = true;
+
+            }
+        }
+        return $array;
     }
     public function __construct($flag) {
         $this->flag = $flag;

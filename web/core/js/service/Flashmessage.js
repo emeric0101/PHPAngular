@@ -26,7 +26,6 @@ var Emeric0101;
                         msg: msg,
                         type: type
                     });
-                    console.log(msg);
                 };
                 return FlashmessageService;
             }());

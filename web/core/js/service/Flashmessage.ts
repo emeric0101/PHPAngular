@@ -21,7 +21,6 @@ module Emeric0101.PHPAngular.Service {
                 msg: msg,
                 type: type
             });
-            console.log(msg);
         }
         constructor() {
         }

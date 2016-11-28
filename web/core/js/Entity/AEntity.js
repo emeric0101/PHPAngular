@@ -133,7 +133,13 @@ var Emeric0101;
                         if (value !== null && typeof (value["class"]) === 'string') {
                             if (value["class"] === 'datetime') {
                                 var s = value['date'].split(/\D/);
-                                value = new Date(Date.UTC(s[0], --s[1] || 0, s[2] || '', s[3] || '', s[4] || '', s[5] || '', s[6] || ''));
+                                var d = new Date();
+                                d.setFullYear(s[0]);
+                                d.setMonth(s[1] - 1);
+                                d.setDate(s[2]);
+                                d.setHours(s[3]);
+                                d.setMinutes(s[4]);
+                                value = d;
                             }
                             else {
                                 throw "Unable to serialize : " + value['class'];
