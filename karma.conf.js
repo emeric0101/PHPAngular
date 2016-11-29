@@ -17,10 +17,10 @@ module.exports = function(config) {
     files: [
      'node_modules/es6-promise/dist/es6-promise.auto.js',
 
-      'web/bower_components/angular/angular.js',
-      'web/bower_components/angular-route/angular-route.js',
-      'web/lib/angular-locale_fr-fr.js',
-      'web/bower_components/angular-mocks/angular-mocks.js',
+      'node_modules/angular/angular.js',
+      'node_modules/angular-route/angular-route.js',
+      'node_modules/angular-locale_fr-fr.js',
+      'node_modules/angular-mocks/angular-mocks.js',
 
       'web/core/js/Entity/*.js',
       'web/core/js/*.js',

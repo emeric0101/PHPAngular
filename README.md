@@ -5,22 +5,20 @@
 ### Changelog
 - Using php-di for injection (you must update the api.php into /web)
 
-### Todo for 0.2
-- [ ] alias for controller function auto generated
-- [ ] issue with installation (typings is not installed)
-- [x] Using php-di for dependency injection
-- [x] EntityManager client side
-- [x] Entity generator from server client side
-- [x] RepositoryService client side
-- [x] Custom method call by the repository service to get data from server
-- [x] Post array recursivly for the request class on server
-- [x] user loggin
-- [ ] Right management
-- [x] Possibility to combine find request from js to avoid multiple network call
+### Todo for 0.3
 - [ ] Possibility to combine save request from js
-- [ ] Unit test with Yasmine
 - [ ] Using systemJS
-- [ ] Compatibility with Angular 2
+- [ ] move all controller to Angular component (for easy migration to angular2)
+
+### Feature
+- Right table with user group
+- using doctrine from the symfony project
+- using php-di
+- Almost same entity manager for client and server (later a Xamarin version will be released) with persist and flush
+- Client side repository service with findAll, findById, FindSome(condition)
+- user login management
+- auto combine get request
+- unit test with jasmine
 
 ### Samples
 This website uses my library:
@@ -67,8 +65,8 @@ Set your *PHPANGULAR_BUNDLE*, this is the name of your bundle. This must be abso
 If you need to add some js or css file, you can add them in this folder, for instance :
 ```PHP
 static $jsModule = [
-    'bower_components/boostrap/dist/bootstrap.min.js',
-    'bower_components/jquery/dist/jquery.min.js'
+    'node_modules/boostrap/dist/bootstrap.min.js',
+    'node_modules/jquery/dist/jquery.min.js'
 ];
 ```
 
@@ -86,10 +84,7 @@ Then you can use doctrine to create the mysql database with `doctrine orm:schema
 Run the script
 
 `phpangular install`
-
-`cd web
-
-bower install
+ npm install
 `
 
 Then `tsc` (you will get some error but don't worry, the system works and i'm working to fix this)

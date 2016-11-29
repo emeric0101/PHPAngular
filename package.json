@@ -4,6 +4,10 @@
   "description": "- Using php-di for injection (you must update the api.php into /web)",
   "main": "web/core/js/MainController.js",
   "dependencies": {
+    "angular": "^1.5.9",
+    "angular-locale": "^0.3.1",
+    "angular-mocks": "^1.5.9",
+    "angular-route": "^1.5.9",
     "jasmine-core": "^2.5.2",
     "karma": "^1.3.0",
     "karma-jasmine": "^1.0.2",
