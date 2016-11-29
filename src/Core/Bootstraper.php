@@ -11,7 +11,7 @@ use DI\ContainerBuilder;
 class Bootstraper {
     public function start() {
         $containerBuilder = new ContainerBuilder;
-        $containerBuilder->addDefinitions('src/core/config-di.php');
+        $containerBuilder->addDefinitions('src/Core/config-di.php');
         $container = $containerBuilder->build();
 
         $db = $container->get('Emeric0101\PHPAngular\Service\DbService');

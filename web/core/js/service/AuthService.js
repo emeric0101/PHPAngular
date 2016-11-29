@@ -160,7 +160,6 @@ var Emeric0101;
                                                     return [4 /*yield*/, user.getGroupe()];
                                                 case 1:
                                                     group = _a.sent();
-                                                    console.log(group);
                                                     if (group == null) {
                                                         return [2 /*return*/, resolve(this.getRightFromFlag(rightName, 'USER'))];
                                                     }

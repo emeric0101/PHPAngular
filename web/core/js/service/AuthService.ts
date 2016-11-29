@@ -82,7 +82,6 @@ module Emeric0101.PHPAngular.Service {
                         return resolve(this.getRightFromFlag(rightName, 'PUBLIC'));
                     }
                     let group = await user.getGroupe<Emeric0101.PHPAngular.Entity.IGroup>();
-                    console.log(group);
                     if (group == null) {
                         return resolve(this.getRightFromFlag(rightName, 'USER'));
                     }
