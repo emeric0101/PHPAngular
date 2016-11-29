@@ -32,6 +32,14 @@ describe('EntityManager', function () {
                 "mail": "testUnitaire"
             }
         });
+        $httpBackend
+            .when('POST', UrlService.makeApi("Groupe", 'post'))
+            .respond(200, {
+            success: true,
+            "Group": {
+                "id": 1,
+            }
+        });
         $httpBackend.whenGET('template/home/home/home.html').respond(200);
         $httpBackend.flush();
         expect(entity.getMail()).toEqual("testUnitaire");
@@ -50,6 +58,14 @@ describe('EntityManager', function () {
             .when('POST', UrlService.makeApi("User", "post"))
             .respond(200, {
             success: false
+        });
+        $httpBackend
+            .when('POST', UrlService.makeApi("Groupe", 'post'))
+            .respond(200, {
+            success: true,
+            "Group": {
+                "id": 1,
+            }
         });
         $httpBackend.whenGET('template/home/home/home.html').respond(200);
         $httpBackend.flush();

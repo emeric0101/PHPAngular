@@ -30,7 +30,7 @@ module Emeric0101.PHPAngular.Service {
         [name : string] : RightGroup
 
     }
-    class AuthService {
+    export class AuthService {
         static $inject = ['AjaxService', 'UrlService', 'LoginService'];
 
         private table : RightTable= null;
@@ -72,18 +72,18 @@ module Emeric0101.PHPAngular.Service {
             }
             return table;
         }
-        getRight(rightName : string, callback : (result : boolean) => void) {
-            this.$login.getUser((user) => {
-                user.getGroupe((groups) => {
-                    for (let group of groups) {
-                        if (this.getRightFromGroupe(rightName, group) == true) {
-                            callback(true);
+        public async getRight(rightName : string) {
+            return new Promise<Boolean>(resolve => {
+                this.$login.getUser(async (user) => {
+                    let groups = await user.getGroupe<Emeric0101.PHPAngular.Entity.IGroup[]>();
+                        for (let group of groups) {
+                            if (this.getRightFromGroupe(rightName, group) == true) {
+                                resolve(true);
+                            }
                         }
-                    }
-                    callback(false);
+                        resolve(false);
                 });
-
-            })
+           });
         }
         getTable() {
             this.$ajax.get(this.$url.makeApi('auth' ,'getTable'), {}, (result) => {

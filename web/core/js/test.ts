@@ -11,6 +11,11 @@ module Emeric0101.PHPAngular.Service {
 }
 
 module Emeric0101.PHPAngular.Entity {
+    export class GroupeUser extends Emeric0101.PHPAngular.Entity.Model implements Emeric0101.PHPAngular.Entity.IGroup {
+        getFlag() {
+            return 'USER';
+        }
+    }
     export class User extends Emeric0101.PHPAngular.Entity.Model implements Emeric0101.PHPAngular.Entity.IUser {
         private mail;
   	     public getMail() {
@@ -18,6 +23,12 @@ module Emeric0101.PHPAngular.Entity {
          }
          public setMail(m) {
              this.mail = m;
+         }
+         private groupe = [new GroupeUser('groupe', this.repositoryService)];
+         public async getGroupe() {
+             return new Promise<GroupeUser[]>(resolve => {
+                 resolve(this.groupe);
+             });
          }
         constructor(repositoryService : Emeric0101.PHPAngular.Service.RepositoryService) {
           super("User", repositoryService);

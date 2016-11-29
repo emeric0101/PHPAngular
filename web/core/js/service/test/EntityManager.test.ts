@@ -33,6 +33,13 @@ describe('EntityManager', function () {
              "id": 42,
              "mail": "testUnitaire"
         }});
+        $httpBackend
+        .when('POST', UrlService.makeApi("Groupe", 'post'))
+        .respond(200, {
+          success: true,
+          "Group": {
+             "id": 1,
+        }});
         $httpBackend.whenGET('template/home/home/home.html').respond(200);
 
         $httpBackend.flush();
@@ -54,6 +61,13 @@ describe('EntityManager', function () {
         .respond(200, {
             success: false
         });
+        $httpBackend
+        .when('POST', UrlService.makeApi("Groupe", 'post'))
+        .respond(200, {
+          success: true,
+          "Group": {
+             "id": 1,
+        }});
         $httpBackend.whenGET('template/home/home/home.html').respond(200);
 
         $httpBackend.flush();

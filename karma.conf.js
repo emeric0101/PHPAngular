@@ -15,10 +15,13 @@ module.exports = function(config) {
 
     // list of files / patterns to load in the browser
     files: [
+     'node_modules/es6-promise/dist/es6-promise.auto.js',
+
       'web/bower_components/angular/angular.js',
       'web/bower_components/angular-route/angular-route.js',
       'web/lib/angular-locale_fr-fr.js',
       'web/bower_components/angular-mocks/angular-mocks.js',
+
       'web/core/js/Entity/*.js',
       'web/core/js/*.js',
       'web/core/js/test.js', // for fake factory service

@@ -7,6 +7,7 @@ final class Config {
     *   All file to load in the index.php
     */
     static $jsModule = [
+        'node_modules/es6-promise/dist/es6-promise.auto.js'
     ];
     /**
     *   All css files to load in the index.php
