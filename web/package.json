@@ -2,9 +2,10 @@
   "name": "phpangular1",
   "version": "1.0.0",
   "description": "- Using php-di for injection (you must update the api.php into /web)",
-  "main": "web/core/js/MainController.js",
+  "main": "core/js/MainController.js",
   "dependencies": {
     "angular": "^1.5.9",
+    "angular-i18n": "^1.5.9",
     "angular-locale": "^0.3.1",
     "angular-mocks": "^1.5.9",
     "angular-route": "^1.5.9",

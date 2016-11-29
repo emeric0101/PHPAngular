@@ -106,15 +106,30 @@ var Emeric0101;
                         }
                     }
                 };
-                AuthService.prototype.getRightFromGroupe = function (rightname, groupe) {
-                    var flag = groupe.getFlag();
-                    if (flag == 'ADMIN') {
-                        return true;
-                    }
-                    if (this.table == null || this.table['flag'] != undefined) {
-                        return false;
-                    }
-                    return this.table[flag].getRight(rightname);
+                AuthService.prototype.getRightFromFlag = function (rightname, flag) {
+                    return __awaiter(this, void 0, void 0, function () {
+                        var _a;
+                        return __generator(this, function (_b) {
+                            switch (_b.label) {
+                                case 0:
+                                    if (!(this.table == null))
+                                        return [3 /*break*/, 2];
+                                    _a = this;
+                                    return [4 /*yield*/, this.getTable()];
+                                case 1:
+                                    _a.table = _b.sent();
+                                    _b.label = 2;
+                                case 2:
+                                    if (flag == 'ADMIN') {
+                                        return [2 /*return*/, true];
+                                    }
+                                    if (this.table == null || this.table[flag] == undefined) {
+                                        return [2 /*return*/, false];
+                                    }
+                                    return [2 /*return*/, this.table[flag].getRight(rightname)];
+                            }
+                        });
+                    });
                 };
                 AuthService.prototype.parseTable = function (rights) {
                     var table = {};
@@ -135,20 +150,26 @@ var Emeric0101;
                         return __generator(this, function (_a) {
                             return [2 /*return*/, new Promise(function (resolve) {
                                     _this.$login.getUser(function (user) { return __awaiter(_this, void 0, void 0, function () {
-                                        var groups, _i, groups_1, group;
+                                        var group;
                                         return __generator(this, function (_a) {
                                             switch (_a.label) {
-                                                case 0: return [4 /*yield*/, user.getGroupe()];
-                                                case 1:
-                                                    groups = _a.sent();
-                                                    for (_i = 0, groups_1 = groups; _i < groups_1.length; _i++) {
-                                                        group = groups_1[_i];
-                                                        if (this.getRightFromGroupe(rightName, group) == true) {
-                                                            resolve(true);
-                                                        }
+                                                case 0:
+                                                    if (user == null) {
+                                                        return [2 /*return*/, resolve(this.getRightFromFlag(rightName, 'PUBLIC'))];
                                                     }
-                                                    resolve(false);
-                                                    return [2 /*return*/];
+                                                    return [4 /*yield*/, user.getGroupe()];
+                                                case 1:
+                                                    group = _a.sent();
+                                                    console.log(group);
+                                                    if (group == null) {
+                                                        return [2 /*return*/, resolve(this.getRightFromFlag(rightName, 'USER'))];
+                                                    }
+                                                    return [4 /*yield*/, this.getRightFromFlag(rightName, group.getFlag())];
+                                                case 2:
+                                                    if ((_a.sent()) == true) {
+                                                        return [2 /*return*/, resolve(true)];
+                                                    }
+                                                    return [2 /*return*/, resolve(false)];
                                             }
                                         });
                                     }); });
@@ -157,15 +178,21 @@ var Emeric0101;
                     });
                 };
                 AuthService.prototype.getTable = function () {
-                    var _this = this;
-                    this.$ajax.get(this.$url.makeApi('auth', 'getTable'), {}, function (result) {
-                        if (result.data.success !== true || result.data.authTable == undefined) {
-                            console.error("Unable to load right table");
-                            console.log(result);
-                            return;
-                        }
-                        _this.table = _this.parseTable(result.data.authTable);
-                    }, function () {
+                    return __awaiter(this, void 0, void 0, function () {
+                        var _this = this;
+                        return __generator(this, function (_a) {
+                            return [2 /*return*/, new Promise(function (resolve) {
+                                    _this.$ajax.get(_this.$url.makeApi('auth', 'getTable'), {}, function (result) {
+                                        if (result.data.success !== true || result.data.authTable == undefined) {
+                                            throw 'unable to load table';
+                                        }
+                                        _this.table = _this.parseTable(result.data.authTable);
+                                        resolve(_this.table);
+                                    }, function () {
+                                        throw 'unable to load table';
+                                    });
+                                })];
+                        });
                     });
                 };
                 return AuthService;

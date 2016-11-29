@@ -10,4 +10,5 @@ Thumbs.db
 nbproject/*
 vendor/*
 node_modules/*
+web/node_modules/*
 composer.lock

@@ -19,14 +19,13 @@ module.exports = function(config) {
 
       'node_modules/angular/angular.js',
       'node_modules/angular-route/angular-route.js',
-      'node_modules/angular-locale_fr-fr.js',
       'node_modules/angular-mocks/angular-mocks.js',
 
-      'web/core/js/Entity/*.js',
-      'web/core/js/*.js',
-      'web/core/js/test.js', // for fake factory service
-      'web/core/js/**/*.js',
-      'web/template/**/*.js',
+      'core/js/Entity/*.js',
+      'core/js/*.js',
+      'core/js/test.js', // for fake factory service
+      'core/js/**/*.js',
+      'template/**/*.js',
     ],
 
 

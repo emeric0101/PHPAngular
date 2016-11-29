@@ -48,12 +48,15 @@ module Emeric0101.PHPAngular.Service {
 
             }
         }
-        getRightFromGroupe(rightname : string, groupe : Emeric0101.PHPAngular.Entity.IGroup) {
-            let flag = groupe.getFlag();
+        async getRightFromFlag(rightname : string, flag : string) {
+            if (this.table == null) {
+                this.table = await this.getTable();
+            }
+
             if (flag == 'ADMIN') {
                 return true;
             }
-            if (this.table == null || this.table['flag'] != undefined) {
+            if (this.table == null || this.table[flag] == undefined) {
                 return false;
             }
             return this.table[flag].getRight(rightname);
@@ -75,29 +78,35 @@ module Emeric0101.PHPAngular.Service {
         public async getRight(rightName : string) {
             return new Promise<Boolean>(resolve => {
                 this.$login.getUser(async (user) => {
-                    let groups = await user.getGroupe<Emeric0101.PHPAngular.Entity.IGroup[]>();
-                        for (let group of groups) {
-                            if (this.getRightFromGroupe(rightName, group) == true) {
-                                resolve(true);
-                            }
-                        }
-                        resolve(false);
+                    if (user == null) {
+                        return resolve(this.getRightFromFlag(rightName, 'PUBLIC'));
+                    }
+                    let group = await user.getGroupe<Emeric0101.PHPAngular.Entity.IGroup>();
+                    console.log(group);
+                    if (group == null) {
+                        return resolve(this.getRightFromFlag(rightName, 'USER'));
+                    }
+                    if (await this.getRightFromFlag(rightName, group.getFlag()) == true) {
+                        return resolve(true);
+                    }
+                    return resolve(false);
                 });
            });
         }
-        getTable() {
-            this.$ajax.get(this.$url.makeApi('auth' ,'getTable'), {}, (result) => {
-                if (result.data.success !== true || result.data.authTable == undefined) {
-                    console.error("Unable to load right table");
-                    console.log(result);
-                    return;
-                }
-                this.table = this.parseTable(result.data.authTable);
-
-            }, () => {
-                // si la table est vide, tous les droits sont révoqués !
+        async getTable() {
+            return new Promise<RightTable>(resolve => {
+                this.$ajax.get(this.$url.makeApi('auth' ,'getTable'), {}, (result) => {
+                    if (result.data.success !== true || result.data.authTable == undefined) {
+                        throw 'unable to load table';
+                    }
+                    this.table = this.parseTable(result.data.authTable);
+                    resolve(this.table);
+                }, () => {
+                    throw 'unable to load table';
+                });
             });
         }
+
 
         public constructor(
             private $ajax : Emeric0101.PHPAngular.Service.AjaxService,

@@ -84,8 +84,13 @@ Then you can use doctrine to create the mysql database with `doctrine orm:schema
 Run the script
 
 `phpangular install`
- npm install
+ cd web
+ npm init
 `
+Then create your npm project
+`
+npm install --save angular angular-i18n angular-locale angular-mocks angular-route es6-promise
+npm install --save-dev jasmine-core karma karma-jasmine karma-phantomjs-launcher karma-cli karma-htmlfile-reporter karma-jasmine-html-reporter typescript@^2.1 typings
 
 Then `tsc` (you will get some error but don't worry, the system works and i'm working to fix this)
 
