@@ -89,11 +89,11 @@ class Auth extends AService {
             $user = $this->login->getUserFromPHPSession();
         }
         if ($user == null) {
-            return $this->getRightFromFlag('PUBLIC', $right);
+            return $this->getRightFromFlag('PUBLIC', $rightName);
         }
         $groupe = $user->getGroupe();
         if ($groupe == null) {
-            return $this->getRightFromFlag('USER', $right);
+            return $this->getRightFromFlag('USER', $rightName);
         }
         $flag = $groupe->getFlag();
         if ($flag == 'ADMIN') {
@@ -102,7 +102,7 @@ class Auth extends AService {
         if ($this->table == null || !array_key_exists($flag, $this->table)) {
             return false;
         }
-        return $this->getRightFromFlag($flag, $right);
+        return $this->getRightFromFlag($flag, $rightName);
     }
 
     public function __construct(ILogin $login) {

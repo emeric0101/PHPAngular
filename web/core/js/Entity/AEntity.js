@@ -104,6 +104,7 @@ var Emeric0101;
                     }
                     var value = obj[field];
                     if (value === null) {
+                        success(null);
                         return null;
                     }
                     var requestExist = ForeignKeyRequest.getForeignKeyRequestFromField(field, this.foreignKeyRequests);

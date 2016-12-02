@@ -64,9 +64,11 @@ RewriteRule ^cache/([a-z]*).png api.php?controller=CacheController&method=genera
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteRule ^cache/([a-z]*).png	 				cache/sprite.png [L]
 
+RewriteRule ^template/(.*)-([0-9]){7}.html   				template/$1.html [L,NC,QSA]
+
 RewriteCond %{REQUEST_URI} \.(gif|jpg|jpeg|png|PNG|GIF|JPG)$
 RewriteCond %{REQUEST_FILENAME} !-f
-RewriteRule .* images/lost.jpg [L]
+RewriteRule .* images/lost.png [L]
 RewriteCond %{REQUEST_URI} \.(gif|jpg|jpeg|png|PNG|GIF|JPG)$
 RewriteRule .* - [L]
 

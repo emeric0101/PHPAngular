@@ -4,6 +4,6 @@ module Emeric0101.PHPAngular.Entity {
         getMail();
 
         setMail(m : string);
-        getGroupe<T>() : Promise<T>;
+        getGroupe(cb?);
     }
 }

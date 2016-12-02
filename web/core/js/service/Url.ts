@@ -52,7 +52,7 @@ module Emeric0101.PHPAngular.Service {
         * @param id number Id
         **/
         public makeTemplate(module : string, action : string = "") {
-            return PhpangularModule.servername + "template/" + module + "/"+ action + "/" + action + '.html';
+            return PhpangularModule.servername + "template/" + module + "/"+ action + "/" + action + '-' + PhpangularModule.version +'.html';
         }
         /**
         * make an url for API json

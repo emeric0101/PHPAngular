@@ -145,35 +145,25 @@ var Emeric0101;
                     return table;
                 };
                 AuthService.prototype.getRight = function (rightName) {
-                    return __awaiter(this, void 0, void 0, function () {
-                        var _this = this;
-                        return __generator(this, function (_a) {
-                            return [2 /*return*/, new Promise(function (resolve) {
-                                    _this.$login.getUser(function (user) { return __awaiter(_this, void 0, void 0, function () {
-                                        var group;
-                                        return __generator(this, function (_a) {
-                                            switch (_a.label) {
-                                                case 0:
-                                                    if (user == null) {
-                                                        return [2 /*return*/, resolve(this.getRightFromFlag(rightName, 'PUBLIC'))];
-                                                    }
-                                                    return [4 /*yield*/, user.getGroupe()];
-                                                case 1:
-                                                    group = _a.sent();
-                                                    if (group == null) {
-                                                        return [2 /*return*/, resolve(this.getRightFromFlag(rightName, 'USER'))];
-                                                    }
-                                                    return [4 /*yield*/, this.getRightFromFlag(rightName, group.getFlag())];
-                                                case 2:
-                                                    if ((_a.sent()) == true) {
-                                                        return [2 /*return*/, resolve(true)];
-                                                    }
-                                                    return [2 /*return*/, resolve(false)];
-                                            }
-                                        });
-                                    }); });
-                                })];
-                        });
+                    var _this = this;
+                    return new Promise(function (resolve) {
+                        _this.$login.getUser(function (user) { return __awaiter(_this, void 0, void 0, function () {
+                            var _this = this;
+                            return __generator(this, function (_a) {
+                                if (user == null) {
+                                    return [2 /*return*/, resolve(this.getRightFromFlag(rightName, 'PUBLIC'))];
+                                }
+                                user.getGroupe(function (group) {
+                                    if (group == null) {
+                                        return resolve(_this.getRightFromFlag(rightName, 'USER'));
+                                    }
+                                    _this.getRightFromFlag(rightName, group.getFlag()).then(function (r) {
+                                        return resolve(r);
+                                    });
+                                });
+                                return [2 /*return*/];
+                            });
+                        }); });
                     });
                 };
                 AuthService.prototype.getTable = function () {

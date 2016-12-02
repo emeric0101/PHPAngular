@@ -128,6 +128,7 @@ module Emeric0101.PHPAngular.Entity {
                 }
 
 
+
                 error = function() {};
 
                 if (success == undefined) {
@@ -135,13 +136,16 @@ module Emeric0101.PHPAngular.Entity {
                 }
 
                 var value = obj[field];
+
                 if (value === null) {
+                    success(null);
                     return null;
                 }
 
 
                 // If the key is already requested (or requested)
                 let requestExist = ForeignKeyRequest.getForeignKeyRequestFromField(field, this.foreignKeyRequests);
+
                 if (requestExist != null) {
                     requestExist.addCallback(success); // add callback
 

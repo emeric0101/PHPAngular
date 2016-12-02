@@ -44,7 +44,7 @@ var Emeric0101;
                 };
                 UrlService.prototype.makeTemplate = function (module, action) {
                     if (action === void 0) { action = ""; }
-                    return PhpangularModule.servername + "template/" + module + "/" + action + "/" + action + '.html';
+                    return PhpangularModule.servername + "template/" + module + "/" + action + "/" + action + '-' + PhpangularModule.version + '.html';
                 };
                 UrlService.prototype.makeApi = function (module, action, id, params) {
                     module = module['ucFirst']();

@@ -75,20 +75,21 @@ module Emeric0101.PHPAngular.Service {
             }
             return table;
         }
-        public async getRight(rightName : string) {
-            return new Promise<Boolean>(resolve => {
+        public getRight(rightName : string) {
+            return new Promise<boolean>(resolve => {
                 this.$login.getUser(async (user) => {
                     if (user == null) {
                         return resolve(this.getRightFromFlag(rightName, 'PUBLIC'));
                     }
-                    let group = await user.getGroupe<Emeric0101.PHPAngular.Entity.IGroup>();
-                    if (group == null) {
-                        return resolve(this.getRightFromFlag(rightName, 'USER'));
-                    }
-                    if (await this.getRightFromFlag(rightName, group.getFlag()) == true) {
-                        return resolve(true);
-                    }
-                    return resolve(false);
+                    user.getGroupe((group) => {
+                        if (group == null) {
+                            return resolve(this.getRightFromFlag(rightName, 'USER'));
+                        }
+                        this.getRightFromFlag(rightName, group.getFlag()).then(r => {
+                            return resolve(r);
+                        });
+                    });
+
                 });
            });
         }
