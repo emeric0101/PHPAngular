@@ -75,7 +75,7 @@ class Login extends AService implements ILogin {
         $this->user = $user[0];
         return $sid;
     }
-    function loginWithUser(\Emeric0101\PHPAngular\Entity\IUser $user) {
+    function loginWithUser($user) {
         $session = new \Emeric0101\PHPAngular\Entity\Session();
         $session->setUser($user);
         $sid = bin2hex(random_bytes(100));

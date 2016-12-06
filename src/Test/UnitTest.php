@@ -1,7 +1,7 @@
 <?php
 namespace Emeric0101\PHPAngular\Test;
 use DI\ContainerBuilder;
-use phpunit\framework\TestCase;
+use PHPUnit\Framework\TestCase;
 use Emeric0101\PHPAngular\Service\ILogin;
 use Emeric0101\PHPAngular\Entity\{IUser ,IGroup};
 
@@ -68,7 +68,12 @@ abstract class UnitTest extends TestCase
     public function get($key) {
         if ($this->container == null) {
             $containerBuilder = new ContainerBuilder;
-            $containerBuilder->addDefinitions('src/core/config-di.test.php');
+            if (file_exists('src/core/config-di.test.php')) {
+                $containerBuilder->addDefinitions('src/core/config-di.test.php');
+            }
+            else {
+                $containerBuilder->addDefinitions('vendor/emeric0101/PHPAngular/src/core/config-di.test.php');
+            }
             $this->container = $containerBuilder->build();
         }
 
