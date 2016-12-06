@@ -80,7 +80,7 @@ class Auth extends AService {
         return $this->table;
     }
 
-    public function getRightFromFlag($flag, $right) {
+    public function getRightFromFlag($flag, $rightName) {
         return $this->table[$flag]->getRight($rightName);
     }
 

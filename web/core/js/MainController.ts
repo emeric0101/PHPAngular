@@ -5,7 +5,7 @@ var phpangularModule = angular.module('phpangularModule', phpangularmodules);
 module PhpangularModule {
 
     export var servername = '';
-    export var version = '0000002';
+    export var version = contentversion;
     export var debug = true;
     phpangularModule.config(['$routeProvider', '$locationProvider',
     // Define all basics route for phpangular

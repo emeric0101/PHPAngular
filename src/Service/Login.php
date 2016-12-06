@@ -102,6 +102,10 @@ class Login extends AService implements ILogin {
     function getUserFromPHPSession() {
 		if ($this->user == null) {
             $sid = $this->request->session('usersid', '');
+            if ($sid == '') {
+                // try with a get key
+                $sid = $this->request->get('sessionid', '');
+            }
 			$this->user = $this->getUserFromSession($sid);
 		}
         return $this->user;

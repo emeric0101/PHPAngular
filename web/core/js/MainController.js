@@ -4,7 +4,7 @@ var phpangularModule = angular.module('phpangularModule', phpangularmodules);
 var PhpangularModule;
 (function (PhpangularModule) {
     PhpangularModule.servername = '';
-    PhpangularModule.version = '0000002';
+    PhpangularModule.version = contentversion;
     PhpangularModule.debug = true;
     phpangularModule.config(['$routeProvider', '$locationProvider',
         function ($routeProvider, $locationProvider) {
