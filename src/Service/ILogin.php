@@ -5,5 +5,5 @@ interface ILogin {
     public function logout();
     public function hashPassword($p);
     public function login($mail, $password, $stayConnected);
-    public function loginWithUser(\Emeric0101\PHPAngular\Entity\IUser $user);
+    public function loginWithUser($user);
 }
