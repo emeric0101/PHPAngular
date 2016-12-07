@@ -142,6 +142,7 @@ class Cache extends AService {
             if (!PHPANGULAR_DEBUG) {
                 $scss->setFormatter("Leafo\ScssPhp\Formatter\Crunched");
             }
+            $scss->setImportPaths(\Emeric0101\PHPAngular\Config::$scssPath);
             $content = $scss->compile($content);
             $extension = 'css';
         }

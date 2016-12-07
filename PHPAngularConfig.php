@@ -29,5 +29,9 @@ final class Config {
         'USER' => ['user-edit-itself']
     ];
     static $cache = 'FILE';
+    static $scssPath = [];
+
+    // enable the phpSass compiler
+    static $phpSassCompiler = true;
 
 }
