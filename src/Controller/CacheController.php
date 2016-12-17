@@ -18,6 +18,9 @@ class CacheController extends Controller {
     }
     public function generateJs() {
         header('Content-type: application/javascript');
+		if (!\Emeric0101\PHPAngular\Config::$phpSassCompiler) {
+			return false;
+		}
         $this->_generate("js");
     }
 

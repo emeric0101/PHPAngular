@@ -8,6 +8,8 @@ final class Config {
     */
     static $jsModule = [
         'node_modules/es6-promise/dist/es6-promise.auto.js'
+        'node_modules/core-js/client/shim.min.js',
+        'node_modules/systemjs/dist/system.src.js'
     ];
     /**
     *   All css files to load in the index.php
@@ -33,5 +35,7 @@ final class Config {
 
     // enable the phpSass compiler
     static $phpSassCompiler = true;
+    static $phpPackJs = true;
+    static $angular = 1;
 
 }
