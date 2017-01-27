@@ -15,7 +15,9 @@ class Multiple extends Controller {
 
 	private function prepareGetRequest($request) {
 		$_GET['method'] = $request['method'];
-		foreach ($request['params'] as $t => $p) { $_GET[$t] = $p;}
+		if (is_array($request['params'])) {
+			foreach ($request['params'] as $t => $p) { $_GET[$t] = $p;}
+		}
 	}
 
 	/**
