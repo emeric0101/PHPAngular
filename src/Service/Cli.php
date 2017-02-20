@@ -143,7 +143,7 @@ class Cli extends AService {
         $code .= '    export class '. $entity . ' extends Emeric0101.PHPAngular.Entity.Model {' . PHP_EOL;
 
         $reflectionClass = new \ReflectionClass($classNameCurrent);
-        $annotationReader = new AnnotationReader($reflectionClass);
+        $annotationReader = new AnnotationReader();
         foreach ($reflectionClass->getProperties() as $property) {
             if ($property->name == 'id') {continue;}
             $methodInfo = $annotationReader->getPropertyAnnotations($property);
