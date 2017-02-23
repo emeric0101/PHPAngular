@@ -32,9 +32,9 @@ export class UrlService {
     public make(module : string, action : string = "", id? : number, params : {} = {}) {
         var url = module;
         if (action !== "") {
-            url += '-' + action;
+            url += '/' + action;
             if (typeof(id) !== 'undefined' && id !== null) {
-                url += '-' + id;
+                url += '/' + id;
             }
         }
         var first = true;

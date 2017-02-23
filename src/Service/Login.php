@@ -85,7 +85,7 @@ class Login extends AService implements ILogin {
         $this->entityManager->persist($session);
         $this->entityManager->flush();
         $this->user = $user;
-        return true;
+        return $sid;
     }
     /**
     * Get the current logged user or null
