@@ -12,6 +12,7 @@ abstract class Controller {
     public function setBaseService( $response,  $dbService,  $request) {
         $this->response = $response;
         if ($dbService != null) { // unit testintg
+            $dbService->createEntityManager();
             $this->entityManager = $dbService->getEntityManager();
 
         }

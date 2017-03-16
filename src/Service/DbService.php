@@ -18,25 +18,28 @@ class DbService extends AService {
     public function close() {
         $this->entityManager->getConnection()->close();
     }
+    // database configuration parameters
+    private $conn = array(
+        'driver'   => 'pdo_mysql',
+        'host'     => DOCTRINE_HOST,
+        'user'     => DOCTRINE_USER,
+        'password' => DOCTRINE_PASSWORD,
+        'dbname'   => DOCTRINE_DB,
+    );
+    private $config = null;
+    private $evm = null;
     public function __construct(CacheService $cache) {
         $this->log = new \Doctrine\DBAL\Logging\DebugStack();
         $isDevMode = true;
-        $config = Setup::createAnnotationMetadataConfiguration(array("src/Entity",'vendor/Emeric0101/PHPAngular/src/Entity'), $isDevMode);
+        $this->config = Setup::createAnnotationMetadataConfiguration(array("src/Entity",'vendor/Emeric0101/PHPAngular/src/Entity'), $isDevMode);
         // Cache
-        $config->setQueryCacheImpl($cache->getCacheDriver());
-        $config->setResultCacheImpl($cache->getCacheDriver());
+        $this->config->setQueryCacheImpl($cache->getCacheDriver());
+        $this->config->setResultCacheImpl($cache->getCacheDriver());
         //$config->setMetadataCacheImpl($cache->getCacheDriver()); bug with IUser
-        // database configuration parameters
-        $conn = array(
-            'driver'   => 'pdo_mysql',
-            'host'     => DOCTRINE_HOST,
-            'user'     => DOCTRINE_USER,
-            'password' => DOCTRINE_PASSWORD,
-            'dbname'   => DOCTRINE_DB,
-        );
+
 
         // Add interface
-        $evm  = new \Doctrine\Common\EventManager;
+        $this->evm  = new \Doctrine\Common\EventManager;
         $rtel = new \Doctrine\ORM\Tools\ResolveTargetEntityListener;
         foreach (\Emeric0101\PHPAngular\Config::$ResolveTargetEntities as $interface => $target) {
             $rtel->addResolveTargetEntity($interface, $target, array());
@@ -44,14 +47,19 @@ class DbService extends AService {
         }
         // Adds a target-entity class
         // Add the ResolveTargetEntityListener
-        $evm->addEventListener(\Doctrine\ORM\Events::loadClassMetadata, $rtel);
+        $this->evm->addEventListener(\Doctrine\ORM\Events::loadClassMetadata, $rtel);
 
         // obtaining the entity manager
-        $this->entityManager = EntityManager::create($conn, $config, $evm);
+        $this->createEntityManager();
 
         // Logging
-        $this->entityManager->getConfiguration()->setSQLLogger($this->log);
+        //$this->entityManager->getConfiguration()->setSQLLogger($this->log);
     }
-
+    public function createEntityManager() {
+      if ($this->entityManager != null) {
+        $this->entityManager->close();
+      }
+      $this->entityManager = EntityManager::create($this->conn, $this->config, $this->evm);
+    }
 
 }

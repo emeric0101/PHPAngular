@@ -19,9 +19,9 @@ class Url extends AService {
     public function make($module, $action = "", $id = null, $params = []) {
         $url = URL_ABSOLUTE . $module;
         if ($action !== "") {
-            $url .= '/' . $action;
+            $url .= '-' . $action;
             if ($id !== null) {
-                $url .= '/' . $id;
+                $url .= '-' . $id;
             }
         }
 

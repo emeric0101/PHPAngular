@@ -1,7 +1,5 @@
 <!doctype html>
 <html>
-    <base href="<?php echo $baseUrl; ?>">
-
     <?php if (\Emeric0101\PHPAngular\Config::$phpSassCompiler): ?>
         <script src="cache/script-<?php echo VERSION; ?>.js"></script>
     <?php else: ?>
@@ -23,6 +21,7 @@
     <?php endforeach; ?>
 
     <title><?php echo \Emeric0101\PHPAngular\Config::APP_TITLE; ?></title>
+    <base href="<?php echo $baseUrl; ?>">
 
     <script src="systemjs.config.js"></script>
     <script>
