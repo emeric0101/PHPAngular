@@ -11,8 +11,9 @@ abstract class Controller {
     /** We use this method to let user set their own constructor with injection */
     public function setBaseService( $response,  $dbService,  $request) {
         $this->response = $response;
+        ini_set("log_errors_max_len",0);
         if ($dbService != null) { // unit testintg
-            $dbService->createEntityManager();
+            //$dbService->createEntityManager();
             $this->entityManager = $dbService->getEntityManager();
 
         }

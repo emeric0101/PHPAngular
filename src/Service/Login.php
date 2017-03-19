@@ -18,7 +18,10 @@ class Login extends AService implements ILogin {
         if (empty($session)) {
             return null;
         }
-        return $session[0]->getUser();
+        // fix some bug with entity conflit
+        $userLogged = $this->entityManager->find("AFE\DmoBundle\Entity\User", $session[0]->getUser()->getId());
+
+        return $userLogged;
     }
 
     function __construct(DbService $db, Request $request) {
@@ -61,7 +64,7 @@ class Login extends AService implements ILogin {
             return false;
         }
         // check password
-        if (!password_verify($password, $user[0]->getPassword())) {
+        if (!password_verify($password, $user[0]->readPassword())) {
             return false;
         }
         $session = new \Emeric0101\PHPAngular\Entity\Session();

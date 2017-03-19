@@ -32,6 +32,7 @@ class RequestClass {
             break;
             case 'double':
                 if ($type == "string" || $type == "integer" || $type == "double") {
+                    $src = str_replace(",", ".", $src);
                     return floatval($src);
                 }
             break;
