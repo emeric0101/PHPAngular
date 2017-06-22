@@ -3,7 +3,6 @@ namespace Emeric0101\PHPAngular\Service;
 use Emeric0101\PHPAngular\Service\DbService;
 use Emeric0101\PHPAngular\Service\Request;
 use Emeric0101\PHPAngular\Service\Singleton;
-use AFE\DmoBundle\Entity\Variable;
 use Emeric0101\PHPAngular\Service\AService;
 use Emeric0101\PHPAngular\Service\ILogin;
 
@@ -19,7 +18,7 @@ class Login extends AService implements ILogin {
             return null;
         }
         // fix some bug with entity conflit
-        $userLogged = $this->entityManager->find("AFE\DmoBundle\Entity\User", $session[0]->getUser()->getId());
+        $userLogged = $this->entityManager->find("Emeric0101\PHPAngular\Entity\IUser", $session[0]->getUser()->getId());
 
         return $userLogged;
     }
