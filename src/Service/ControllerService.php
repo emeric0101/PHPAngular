@@ -40,7 +40,9 @@ class ControllerService extends AService{
 			$methodGet = $this->request->get("method", "index");
 			$idGet = intval($this->request->get('id', ""));
 		}
-
+        if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
+            exit();
+        }
         $controllerName = static::getControllerName($controllerGet);
 
         // Add base services if the controller don't exist
